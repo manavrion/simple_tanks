@@ -30,27 +30,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -74,28 +74,28 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir).dist_$(PlatformShortName)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir).tmp\inter_$(PlatformShortName)_$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).include;$(SolutionDir)..\wnd_accelerator\wnd_accelerator;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).lib\$(PlatformShortName)_$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir).dist_$(PlatformShortName)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir).tmp\inter_$(PlatformShortName)_$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).include;$(SolutionDir)..\wnd_accelerator\wnd_accelerator;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).lib\$(PlatformShortName)_$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir).dist_$(PlatformShortName)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir).tmp\inter_$(PlatformShortName)_$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).include;$(SolutionDir)..\wnd_accelerator\wnd_accelerator;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).lib\$(PlatformShortName)_$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir).dist_$(PlatformShortName)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir).tmp\inter_$(PlatformShortName)_$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).include;$(SolutionDir)..\wnd_accelerator\wnd_accelerator;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).lib\$(PlatformShortName)_$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -114,6 +114,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
       <ProfileGuidedDatabase>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalDependencies>wnd_accelerator.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake>
       <OutputFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).xml</OutputFile>
@@ -138,6 +139,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
       <ProfileGuidedDatabase>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalDependencies>wnd_accelerator.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake>
       <OutputFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).xml</OutputFile>
@@ -166,6 +168,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
       <ProfileGuidedDatabase>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalDependencies>wnd_accelerator.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake>
       <OutputFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).xml</OutputFile>
@@ -194,6 +197,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
       <ProfileGuidedDatabase>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).pgd</ProfileGuidedDatabase>
+      <AdditionalDependencies>wnd_accelerator.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Xdcmake>
       <OutputFile>$(SolutionDir).tmp\$(PlatformShortName)_$(Configuration)\$(TargetName).xml</OutputFile>
@@ -206,19 +210,28 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="game_field.h" />
+    <ClInclude Include="game_window.h" />
+    <ClInclude Include="gui_game.h" />
+    <ClInclude Include="gui_main_menu.h" />
+    <ClInclude Include="resources\resource.h" />
+    <ClInclude Include="resources\targetver.h" />
     <ClInclude Include="simple_tanks.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="tank.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="game_window.cpp" />
+    <ClCompile Include="gui_main_menu.cpp" />
     <ClCompile Include="simple_tanks.cpp" />
+    <ClCompile Include="tank.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="simpletanks.rc" />
+    <Image Include="resources\battle_city.png" />
+    <Image Include="resources\simple_tanks.ico" />
+    <Image Include="resources\small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="simpletanks.ico" />
-    <Image Include="small.ico" />
+    <ResourceCompile Include="resources\simple_tanks.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 /.dist_x64_Debug
+/.dist_x64_Release
+/.lib
+/.dist_x86_Debug
+/.dist_x86_Release
