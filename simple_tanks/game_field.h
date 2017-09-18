@@ -97,8 +97,8 @@ namespace simple_tanks {
 
     protected:
 
-        virtual void PaintPre(Gdiplus::Graphics *graphics) final {
-            graphics->FillRectangle(&SolidBrush(Color::Black), Rect(0, 0, width, height));
+        virtual void PaintPre(Graphics graphics) override {
+            graphics.FillRectangle(&SolidBrush(Color::Black), Rect(0, 0, width, height));
 
             Gdiplus::TextureBrush brick(brickTexture.get());
 
@@ -107,13 +107,13 @@ namespace simple_tanks {
                     int x = i * blockSize;
                     int y = j * blockSize;
                     if (map[i][j].type == Block::Type::brick) {
-                        graphics->FillRectangle(&brick, Rect(x, y, blockSize, blockSize));
+                        graphics.FillRectangle(&brick, Rect(x, y, blockSize, blockSize));
                     }
                 }
             }
         }
 
-        virtual void PaintPost(Gdiplus::Graphics *graphics) final {
+        virtual void PaintPost(Graphics graphics) override {
             
         }
 

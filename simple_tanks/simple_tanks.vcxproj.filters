@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{cfb4b140-d5d4-4335-aa04-d74785acd062}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -21,20 +24,11 @@
     <ClInclude Include="simple_tanks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game_window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resources\resource.h">
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="resources\targetver.h">
       <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="gui_main_menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gui_game.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_field.h">
       <Filter>Header Files</Filter>
@@ -42,21 +36,30 @@
     <ClInclude Include="tank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="gui_game_main_window.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_menu.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_battle.h">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui_main_menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_game_main_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_battle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

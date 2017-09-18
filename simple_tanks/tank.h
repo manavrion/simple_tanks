@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+//#include "game_window.h"
 
 namespace simple_tanks {
     using namespace wnd_accelerator;
@@ -74,8 +75,7 @@ namespace simple_tanks {
 
 
         virtual void PaintPre(Graphics graphics) final {
-            //graphics.Clear(Color(0, 0, 0, 0));
-            //graphics.DrawImage(tankTexture, 0, 0, width, height);
+            graphics.DrawImage(tankTexture, 0, 0, width, height);
         }
 
         virtual void PaintPost(Graphics graphics) final {

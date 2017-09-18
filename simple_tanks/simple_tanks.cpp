@@ -9,7 +9,7 @@
 #include <windows.h>
 #include <utility>
 
-#include "game_window.h"
+#include "gui_game_main_window.h"
 
 using namespace simple_tanks;
 
@@ -24,7 +24,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
 
-    std::unique_ptr<GameWindow> window(new GameWindow());
+    std::unique_ptr<GuiGameMainWindow> window(new GuiGameMainWindow());
     window->Run();
 
     return 0;

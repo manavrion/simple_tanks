@@ -210,19 +210,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.h" />
     <ClInclude Include="game_field.h" />
-    <ClInclude Include="game_window.h" />
-    <ClInclude Include="gui_game.h" />
-    <ClInclude Include="gui_main_menu.h" />
+    <ClInclude Include="gui_game_main_window.h" />
+    <ClInclude Include="gui_battle.h" />
+    <ClInclude Include="gui_menu.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="resources\targetver.h" />
     <ClInclude Include="simple_tanks.h" />
     <ClInclude Include="tank.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="game_window.cpp" />
-    <ClCompile Include="gui_main_menu.cpp" />
+    <ClCompile Include="gui_game_main_window.cpp" />
+    <ClCompile Include="gui_battle.cpp" />
+    <ClCompile Include="gui_menu.cpp" />
     <ClCompile Include="simple_tanks.cpp" />
     <ClCompile Include="tank.cpp" />
   </ItemGroup>

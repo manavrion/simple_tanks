@@ -3,6 +3,8 @@
 #include <thread>
 #include <chrono>
 
+#include "gui_game_main_window.h"
+
 namespace simple_tanks {
 
 
@@ -44,9 +46,10 @@ namespace simple_tanks {
                         tankTexture = tankTextureRight.get();
                         break;
                 }
-                Repaint();
             }
         }));
+
+        GuiGameMainWindow::AddDynamicObject(this);
     }
 
     bool Tank::IsValidTankPos(int x, int y) {
