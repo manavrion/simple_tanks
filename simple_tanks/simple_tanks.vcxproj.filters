@@ -41,6 +41,12 @@
     <ClInclude Include="entities\tank_layout.h">
       <Filter>entities</Filter>
     </ClInclude>
+    <ClInclude Include="entities\bullet.h">
+      <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="entities\i_breakable.h">
+      <Filter>entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp" />
@@ -58,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="gui\game_field.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="entities\bullet.cpp">
+      <Filter>entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

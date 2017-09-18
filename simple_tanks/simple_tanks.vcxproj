@@ -210,6 +210,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="entities\bullet.h" />
+    <ClInclude Include="entities\i_breakable.h" />
     <ClInclude Include="entities\tank.h" />
     <ClInclude Include="entities\tank_layout.h" />
     <ClInclude Include="gui\game_field.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="simple_tanks.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="entities\bullet.cpp" />
     <ClCompile Include="entities\tank.cpp" />
     <ClCompile Include="gui\game_field.cpp" />
     <ClCompile Include="gui\gui_battle.cpp" />

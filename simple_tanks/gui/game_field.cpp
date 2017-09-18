@@ -29,7 +29,7 @@ namespace simple_tanks {
                 if (color.GetValue() == Color::Red) {
                     map[i][j].type = Block::Type::brick;
                 }
-
+				map[i][j].SetPos(i*kBlockSize, j*kBlockSize);
             }
         }
 
