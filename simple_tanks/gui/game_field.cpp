@@ -39,36 +39,31 @@ namespace simple_tanks {
         Tank* userTank = new Tank(this);
         userTank->MoveTo(4 * 4 * 8, 12 * 4 * 8);
 
+        auto manip = [](KeyEvent* keyEvent, Tank* tank, bool act) {
+            switch (keyEvent->keyCode) {
+                case KeyEvent::KeyCodes::alphaW:
+                    tank->MoveUp(act);
+                    break;
+                case KeyEvent::KeyCodes::alphaS:
+                    tank->MoveDown(act);
+                    break;
+                case KeyEvent::KeyCodes::alphaA:
+                    tank->MoveLeft(act);
+                    break;
+                case KeyEvent::KeyCodes::alphaD:
+                    tank->MoveRight(act);
+                    break;
+                default:
+                    break;
+            }
+        };
+
         userTank->AddKeyPressListener([=](Frame* frame, KeyEvent* keyEvent) {
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaW) {
-                userTank->MoveUp();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaS) {
-                userTank->MoveDown();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaA) {
-                userTank->MoveLeft();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaD) {
-                userTank->MoveRight();
-            }
-            frame->Repaint();
+            manip(keyEvent, (Tank*)frame, true);
         });
 
         userTank->AddKeyReleaseListener([=](Frame* frame, KeyEvent* keyEvent) {
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaW) {
-                userTank->MoveReset();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaS) {
-                userTank->MoveReset();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaA) {
-                userTank->MoveReset();
-            }
-            if (keyEvent->keyCode == KeyEvent::KeyCodes::alphaD) {
-                userTank->MoveReset();
-            }
-            frame->Repaint();
+            manip(keyEvent, (Tank*)frame, false);
         });
         
         Add(userTank);

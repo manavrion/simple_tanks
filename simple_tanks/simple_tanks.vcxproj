@@ -211,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entities\tank.h" />
+    <ClInclude Include="entities\tank_layout.h" />
     <ClInclude Include="gui\game_field.h" />
     <ClInclude Include="gui\gui_battle.h" />
     <ClInclude Include="gui\gui_game_main_window.h" />

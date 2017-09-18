@@ -58,7 +58,7 @@ namespace simple_tanks {
                 if (frameUpdaterThreadTerminate) {
                     break;
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
                 mutex.lock();
                 for (auto frame : alwaysRepaint) {
                     frame->MarkToRepaint();

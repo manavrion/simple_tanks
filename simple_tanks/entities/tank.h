@@ -14,58 +14,33 @@ namespace simple_tanks {
         friend class GameField;
         static const int kTankSize;
         static const int kStepSize;
-
-        enum class Move {
-            Null,
+        enum class Direction {
             Up,
             Down,
             Left,
             Right
         };
-        Move move;
-        GameField* gameField;
     public:
         Tank(GameField* gameField);
 
-
-        void MoveUp() {
-            move = Move::Up;
-        }
-
-        void MoveDown() {
-            move = Move::Down;
-        }
-
-        void MoveLeft() {
-            move = Move::Left;
-        }
-
-        void MoveRight() {
-            move = Move::Right;
-        }
-
-        void MoveReset() {
-            move = Move::Null;
-        }
+        void MoveUp(bool moveUp);
+        void MoveDown(bool moveDown);
+        void MoveLeft(bool moveLeft);
+        void MoveRight(bool moveRight);
+        void MoveReset();
 
 
-        Point GetMovePos() {
-            return Point(x/ kStepSize, y/ kStepSize);
-        }
-
-
-        virtual ~Tank() {
-            tankThreadTerminate = true;
-            tankThread->join();
-        }
+        virtual ~Tank();
 
     protected:
 
-        void MoveTo(int x, int y) {
+        bool MoveTo(int x, int y) {
             if (IsValidTankPos(x, y)) {
                 this->x = x;
                 this->y = y;
+                return true;
             }
+            return false;
         }
 
         bool IsValidTankPos(int x, int y);
@@ -75,11 +50,18 @@ namespace simple_tanks {
             graphics.DrawImage(tankTexture, 0, 0, width, height);
         }
 
-        virtual void PaintPost(Graphics graphics) final override {
-
-        }
+        virtual void PaintPost(Graphics graphics) final override {}
 
     protected:
+        volatile Direction direction;
+        volatile bool moveUp;
+        volatile bool moveDown;
+        volatile bool moveLeft;
+        volatile bool moveRight;
+
+        GameField* gameField;
+
+
         Image* tankTexture;
         std::unique_ptr<Image> tankTextureUp;
         std::unique_ptr<Image> tankTextureDown;

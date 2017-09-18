@@ -38,6 +38,9 @@
     <ClInclude Include="entities\tank.h">
       <Filter>entities</Filter>
     </ClInclude>
+    <ClInclude Include="entities\tank_layout.h">
+      <Filter>entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp" />
