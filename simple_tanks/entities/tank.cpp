@@ -33,22 +33,62 @@ namespace simple_tanks {
         tankThread.reset(new std::thread([&]() {
             while (!tankThreadTerminate) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
-                if (moveUp && MoveTo(x, y - kStepSize)) {
-                    tankTexture = tankTextureUp.get();
-                    direction = Direction::Up;
+                
+                if (moveUp && moveDown) {
+                    moveUp = false;
+                    moveDown = false;
                 }
-                if (moveDown && MoveTo(x, y + kStepSize)) {
-                    tankTexture = tankTextureDown.get();
-                    direction = Direction::Down;
+                if (moveLeft && moveRight) {
+                    moveLeft = false;
+                    moveRight = false;
                 }
-                if (moveLeft && MoveTo(x - kStepSize, y)) {
-                    tankTexture = tankTextureLeft.get();
-                    direction = Direction::Left;
+
+                int count = 0;
+                if (moveUp) count++;
+                if (moveDown) count++;
+                if (moveLeft) count++;
+                if (moveRight) count++;               
+
+                if (count > 1) {
+                    if (moveUp && MoveTo(x, y - kStepSize)) {
+                        tankTexture = tankTextureUp.get();
+                        direction = Direction::Up;
+                    }
+                    if (moveDown && MoveTo(x, y + kStepSize)) {
+                        tankTexture = tankTextureDown.get();
+                        direction = Direction::Down;
+                    }
+                    if (moveLeft && MoveTo(x - kStepSize, y)) {
+                        tankTexture = tankTextureLeft.get();
+                        direction = Direction::Left;
+                    }
+                    if (moveRight && MoveTo(x + kStepSize, y)) {
+                        tankTexture = tankTextureRight.get();
+                        direction = Direction::Right;
+                    }
+                } else {
+                    if (moveUp) {
+                        MoveTo(x, y - kStepSize);
+                        tankTexture = tankTextureUp.get();
+                        direction = Direction::Up;
+                    }
+                    if (moveDown) {
+                        MoveTo(x, y + kStepSize);
+                        tankTexture = tankTextureDown.get();
+                        direction = Direction::Down;
+                    }
+                    if (moveLeft) {
+                        MoveTo(x - kStepSize, y);
+                        tankTexture = tankTextureLeft.get();
+                        direction = Direction::Left;
+                    }
+                    if (moveRight) {
+                        MoveTo(x + kStepSize, y);
+                        tankTexture = tankTextureRight.get();
+                        direction = Direction::Right;
+                    }
                 }
-                if (moveRight && MoveTo(x + kStepSize, y)) {
-                    tankTexture = tankTextureRight.get();
-                    direction = Direction::Right;
-                }
+                
             }
         }));
 
