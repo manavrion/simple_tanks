@@ -1,14 +1,18 @@
 #include "gui_game_main_window.h"
 
-#include "gui_menu.h"
 #include "gui_battle.h"
+#include "gui_menu.h"
+#include "gdi_render\g_button.h"
 
 namespace simple_tanks {
 
     static GuiGameMainWindow* guiGameMainWindow = nullptr;
 
 
-    GuiGameMainWindow::GuiGameMainWindow() : currentMenu(Menu::main), frameUpdaterThreadTerminate(false) {
+    GuiGameMainWindow::GuiGameMainWindow() 
+        : currentMenu(Menu::main), 
+        frameUpdaterThreadTerminate(false) {
+
         guiGameMainWindow = this;
 
         Size size(800, 420);
@@ -35,13 +39,12 @@ namespace simple_tanks {
                          ->SetX((800 / 2) - 150 / 2)
                          ->SetY((420 / 2) - 50 / 2 + 100)
                          ->AddLeftMouseButtonReleaseListener(
-                             [&](Frame* frame, MouseEvent* e) {
+        [&](Frame* frame, MouseEvent* e) {
             currentMenu = Menu::game;
             Repaint();
         })
         );
-
-
+        
 
         guiMainMenu->Build();
         guiGame->Build();
@@ -67,7 +70,6 @@ namespace simple_tanks {
     }
 
     GuiGameMainWindow::~GuiGameMainWindow() {
-
         frameUpdaterThreadTerminate = true;
         frameUpdaterThread->join();
 
@@ -91,7 +93,9 @@ namespace simple_tanks {
     void GuiGameMainWindow::EraseDynamicObject(Frame* frame) {
         if (guiGameMainWindow) {
             guiGameMainWindow->mutex.lock();
-            guiGameMainWindow->alwaysRepaint.erase(std::find(guiGameMainWindow->alwaysRepaint.begin(), guiGameMainWindow->alwaysRepaint.end(), frame));
+            guiGameMainWindow->alwaysRepaint.erase(
+                std::find(guiGameMainWindow->alwaysRepaint.begin(), 
+                          guiGameMainWindow->alwaysRepaint.end(), frame));
             guiGameMainWindow->mutex.unlock();
         }
     }

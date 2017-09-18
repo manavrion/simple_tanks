@@ -1,12 +1,9 @@
 #pragma once
-#include <gdi_render\gdi_control.h>
-#include <gdi_render\g_button.h>
-#include <unordered_map>
-#include <utility>
-#include <string>
-#include <vector>
+#include "gdi_render\gdi_control.h"
+
 #include <thread>
-//#include "game_window.h"
+#include <vector>
+#include <utility>
 
 namespace simple_tanks {
     using namespace wnd_accelerator;
@@ -15,8 +12,8 @@ namespace simple_tanks {
 
     class Tank : public GdiControl {
         friend class GameField;
-        int tankSize;
-        int stepSize;
+        static const int kTankSize;
+        static const int kStepSize;
 
         enum class Move {
             Null,
@@ -53,13 +50,13 @@ namespace simple_tanks {
 
 
         Point GetMovePos() {
-            return Point(x/ stepSize, y/ stepSize);
+            return Point(x/ kStepSize, y/ kStepSize);
         }
 
 
         virtual ~Tank() {
-            tankThread->~thread();
-            tankThread.reset();
+            tankThreadTerminate = true;
+            tankThread->join();
         }
 
     protected:
@@ -74,11 +71,11 @@ namespace simple_tanks {
         bool IsValidTankPos(int x, int y);
 
 
-        virtual void PaintPre(Graphics graphics) final {
+        virtual void PaintPre(Graphics graphics) final override {
             graphics.DrawImage(tankTexture, 0, 0, width, height);
         }
 
-        virtual void PaintPost(Graphics graphics) final {
+        virtual void PaintPost(Graphics graphics) final override {
 
         }
 
@@ -90,6 +87,7 @@ namespace simple_tanks {
         std::unique_ptr<Image> tankTextureRight;
 
         std::unique_ptr<std::thread> tankThread;
+        volatile bool tankThreadTerminate;
     };
 
 }

@@ -1,30 +1,26 @@
 #pragma once
-#include "gui_menu.h"
-#include "gui_battle.h"
+#include "native_controls\window.h"
 
-#include <native_controls\window.h>
-#include <gdi_render\g_button.h>
+#include <mutex>
+#include <thread>
 #include <unordered_map>
 #include <utility>
-#include <thread>
-#include <mutex>
 
 namespace simple_tanks {
+    using namespace wnd_accelerator;
 
-    class GuiGameMainWindow : public wnd_accelerator::Window {
+    class GuiGameMainWindow : public Window {
     public:
         GuiGameMainWindow();
         virtual ~GuiGameMainWindow();
 
         static void AddDynamicObject(Frame* frame);
         static void EraseDynamicObject(Frame* frame);
-
-        
+                
         virtual void NotifyKeyListeners(KeyEvent *keyEvent) final override;
         virtual void NotifyMouseListeners(MouseEvent *mouseEvent) final override;
 
     protected:
-
         void PaintChildBuffers(Graphics graphics) final override;
 
     protected:
@@ -40,7 +36,7 @@ namespace simple_tanks {
 
         std::vector<Frame*> alwaysRepaint;
         std::unique_ptr<std::thread> frameUpdaterThread;
-        bool frameUpdaterThreadTerminate;
+        volatile bool frameUpdaterThreadTerminate;
         std::mutex mutex;
     };
 

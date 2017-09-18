@@ -1,48 +1,50 @@
 #include "tank.h"
-#include "game_field.h"
+
+#include "..\gui\game_field.h"
+#include "..\gui\gui_game_main_window.h"
+
 #include <thread>
 #include <chrono>
 
-#include "gui_game_main_window.h"
-
 namespace simple_tanks {
 
+    const int Tank::kTankSize = 32;
+    const int Tank::kStepSize = 1;
+    
+    Tank::Tank(GameField* gameField) :
+        tankTextureUp(new Image(L"resources/g_tank_l1_u.png")),
+        tankTextureDown(new Image(L"resources/g_tank_l1_d.png")),
+        tankTextureLeft(new Image(L"resources/g_tank_l1_l.png")),
+        tankTextureRight(new Image(L"resources/g_tank_l1_r.png")),
+        tankThreadTerminate(false),
+        gameField(gameField) {
 
-
-    Tank::Tank(GameField* gameField) 
-        : tankSize(32), stepSize(1), gameField(gameField) {
-
-        SetWidth(32);
-        SetHeight(32);
-
-        tankTextureUp.reset(new Image(L"resources/g_tank_l1_u.png"));
-        tankTextureDown.reset(new Image(L"resources/g_tank_l1_d.png"));
-        tankTextureLeft.reset(new Image(L"resources/g_tank_l1_l.png"));
-        tankTextureRight.reset(new Image(L"resources/g_tank_l1_r.png"));
+        SetWidth(kTankSize);
+        SetHeight(kTankSize);
 
         tankTexture = tankTextureUp.get();
 
 
         tankThread.reset(new std::thread([&]() {
-            while (true) {
+            while (!tankThreadTerminate) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
                 switch (move) {
                     case simple_tanks::Tank::Move::Null:
                         break;
                     case simple_tanks::Tank::Move::Up:
-                        MoveTo(x, y - stepSize);
+                        MoveTo(x, y - kStepSize);
                         tankTexture = tankTextureUp.get();
                         break;
                     case simple_tanks::Tank::Move::Down:
-                        MoveTo(x, y + stepSize);
+                        MoveTo(x, y + kStepSize);
                         tankTexture = tankTextureDown.get();
                         break;
                     case simple_tanks::Tank::Move::Left:
-                        MoveTo(x - stepSize, y);
+                        MoveTo(x - kStepSize, y);
                         tankTexture = tankTextureLeft.get();
                         break;
                     case simple_tanks::Tank::Move::Right:
-                        MoveTo(x + stepSize, y);
+                        MoveTo(x + kStepSize, y);
                         tankTexture = tankTextureRight.get();
                         break;
                 }
@@ -53,8 +55,8 @@ namespace simple_tanks {
     }
 
     bool Tank::IsValidTankPos(int x, int y) {
-        int width = x + tankSize;
-        int height = y + tankSize;
+        int width = x + kTankSize;
+        int height = y + kTankSize;
 
         if (x < 0 || y < 0) {
             return false;
@@ -65,11 +67,11 @@ namespace simple_tanks {
         }
 
 
-        x /= gameField->blockSize;
-        y /= gameField->blockSize;
+        x /= gameField->kBlockSize;
+        y /= gameField->kBlockSize;
 
-        width = (width - gameField->blockSize + 6) / gameField->blockSize;
-        height = (height - gameField->blockSize + 6) / gameField->blockSize;
+        width = (width - gameField->kBlockSize + 6) / gameField->kBlockSize;
+        height = (height - gameField->kBlockSize + 6) / gameField->kBlockSize;
 
         if (width >= gameField->map.size() || height >= gameField->map.size()) {
             return false;

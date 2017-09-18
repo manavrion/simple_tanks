@@ -1,5 +1,7 @@
 #include "gui_battle.h"
 
+#include "game_field.h"
+
 namespace simple_tanks {
 
     GuiBattle::GuiBattle() {
@@ -9,8 +11,6 @@ namespace simple_tanks {
         gameField->SetPosition(800 / 2 - gameField->GetWidth() / 2, 420 / 2 - gameField->GetHeight() / 2);
 
         Add(gameField);
-
-
     }
 
     GuiBattle::~GuiBattle() {}
