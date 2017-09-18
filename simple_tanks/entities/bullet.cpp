@@ -8,10 +8,10 @@
 
 namespace simple_tanks {
 
-	const int Bullet::kBulletSize = 32;
+	const int Bullet::kBulletSize = 10;
 	const int Bullet::kStepSize = 1;
 
-	Bullet::Bullet(Direction direction, GameField* gameField) :
+	Bullet::Bullet(GameField* gameField, Tank* tank) :
 		bulletTextureUp(new Image(L"resources/g_bullet_u.png")),
 		bulletTextureDown(new Image(L"resources/g_bullet_d.png")),
 		bulletTextureLeft(new Image(L"resources/g_bullet_l.png")),
@@ -20,55 +20,64 @@ namespace simple_tanks {
 		gameField(gameField),
 		direction(direction) {
 
-		SetWidth(kBulletSize);
-		SetHeight(kBulletSize);
+        SetX(tank->GetX());
+        SetY(tank->GetY());
+        SetWidth(kBulletSize);
+        SetHeight(kBulletSize);
 
-		bulletTexture = bulletTextureUp.get();
+        switch (tank->GetDirection()) {
+            case Tank::Direction::Up:
+                y -= kBulletSize;
+                x += 11;
+                direction = Direction::Up;
+                bulletTexture = bulletTextureUp.get();
+                break;
+            case Tank::Direction::Down:
+                y += tank->GetHeight();
+                x += 11;
+                direction = Direction::Down;
+                bulletTexture = bulletTextureDown.get();
+                break;
+            case Tank::Direction::Left:
+                x -= kBulletSize;
+                y += 11;
+                direction = Direction::Left;
+                bulletTexture = bulletTextureLeft.get();
+                break;
+            case Tank::Direction::Right:
+                x += tank->GetWidth();
+                y += 11;
+                direction = Direction::Right;
+                bulletTexture = bulletTextureRight.get();
+                break;
+        }
 
 
 		bulletThread.reset(new std::thread([&]() {
 			while (!bulletThreadTerminate) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(5));
-				/*if (moveUp && MoveTo(x, y - kStepSize)) {
-					bulletTexture = bulletTextureUp.get();
-				}
-				if (moveDown && MoveTo(x, y + kStepSize)) {
-					bulletTexture = bulletTextureDown.get();
-				}
-				if (moveLeft && MoveTo(x - kStepSize, y)) {
-					bulletTexture = bulletTextureLeft.get();
-				}
-				if (moveRight && MoveTo(x + kStepSize, y)) {
-					bulletTexture = bulletTextureRight.get();
-				}*/
+				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                switch (direction) {
+                    case simple_tanks::Bullet::Direction::Up:
+                        MoveTo(x, y - kStepSize);
+                        break;
+                    case simple_tanks::Bullet::Direction::Down:
+                        MoveTo(x, y + kStepSize);
+                        break;
+                    case simple_tanks::Bullet::Direction::Left:
+                        MoveTo(x - kStepSize, y);
+                        break;
+                    case simple_tanks::Bullet::Direction::Right:
+                        MoveTo(x + kStepSize, y);
+                        break;
+                    default:
+                        break;
+                }
 			}
 		}));
 
 		GuiGameMainWindow::AddDynamicObject(this);
 	}
 
-	void Bullet::MoveUp(bool moveUp) {
-		this->moveUp = moveUp;
-	}
-
-	void Bullet::MoveDown(bool moveDown) {
-		this->moveDown = moveDown;
-	}
-
-	void Bullet::MoveLeft(bool moveLeft) {
-		this->moveLeft = moveLeft;
-	}
-
-	void Bullet::MoveRight(bool moveRight) {
-		this->moveRight = moveRight;
-	}
-
-	void Bullet::MoveReset() {
-		moveUp = false;
-		moveDown = false;
-		moveLeft = false;
-		moveRight = false;
-	}
 
 	Bullet::~Bullet() {
 		GuiGameMainWindow::EraseDynamicObject(this);

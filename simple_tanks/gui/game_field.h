@@ -1,5 +1,6 @@
 #pragma once
 #include "..\entities\tank.h"
+#include "..\entities\block.h"
 #include "..\entities\bullet.h"
 #include "..\entities\i_breakable.h"
 #include "gdi_render\gdi_control.h"
@@ -16,41 +17,14 @@ namespace simple_tanks {
         static const int kMapDim;
         static const int kBlockSize;
 
-		struct Block : public IBreakable {
-			enum class Type {
-				null,
-				brick,
-				rock
-			};
-
-			virtual Rect GetRect() override {
-				return Rect(x, y, kBlockSize, kBlockSize);
-			}
-			virtual int GetHealth() override {}
-			virtual void SetHealth(int health) override {}
-
-			virtual bool IsAlive() override {}
-
-			virtual void TestBullet(Bullet* bullet) override {
-				Rect rect = bullet->GetRect();
-
-			}
-
-			void SetPos(int x, int y) {
-				this->x = x;
-				this->y = y;
-			}
-
-			Type type;
-		protected:			
-			bool health;
-
-			int x;
-			int y;
-		};
     public:
         GameField();
         virtual ~GameField();
+
+        
+        void SpawnBullet(Tank* tank);
+
+
 
     protected:
         virtual void PaintPre(Graphics graphics) final override;

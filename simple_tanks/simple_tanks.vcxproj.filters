@@ -47,6 +47,9 @@
     <ClInclude Include="entities\i_breakable.h">
       <Filter>entities</Filter>
     </ClInclude>
+    <ClInclude Include="entities\block.h">
+      <Filter>entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp" />

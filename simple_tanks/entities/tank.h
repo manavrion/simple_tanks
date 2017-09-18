@@ -14,6 +14,7 @@ namespace simple_tanks {
         friend class GameField;
         static const int kTankSize;
         static const int kStepSize;
+    public:
         enum class Direction {
             Up,
             Down,
@@ -29,8 +30,15 @@ namespace simple_tanks {
         void MoveRight(bool moveRight);
         void MoveReset();
 
+        void Shoot();
+
 
         virtual ~Tank();
+
+
+        Direction GetDirection() {
+            return direction;
+        }
 
     protected:
 

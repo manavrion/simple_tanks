@@ -1,6 +1,7 @@
 #include "game_field.h"
 
 #include "gdi_render\g_button.h"
+#include "..\entities\bullet.h"
 
 #include <unordered_map>
 #include <string>
@@ -29,7 +30,7 @@ namespace simple_tanks {
                 if (color.GetValue() == Color::Red) {
                     map[i][j].type = Block::Type::brick;
                 }
-				map[i][j].SetPos(i*kBlockSize, j*kBlockSize);
+				//map[i][j].SetPos(i*kBlockSize, j*kBlockSize);
             }
         }
 
@@ -53,6 +54,11 @@ namespace simple_tanks {
                 case KeyEvent::KeyCodes::alphaD:
                     tank->MoveRight(act);
                     break;
+                case KeyEvent::KeyCodes::space:
+                    if (act) {
+                        tank->Shoot();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -71,6 +77,14 @@ namespace simple_tanks {
 
 
     GameField::~GameField() {}
+
+
+
+    void GameField::SpawnBullet(Tank* tank) {
+        Add(new Bullet(this, tank));
+    }
+
+
     void GameField::PaintPre(Graphics graphics) {
         graphics.FillRectangle(&blackBrush, Rect(0, 0, width, height));
 

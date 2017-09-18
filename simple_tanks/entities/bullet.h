@@ -1,6 +1,7 @@
 #pragma once
 #include "gdi_render\gdi_control.h"
-#include "bullet.h"
+#include "tank.h"
+#include "i_breakable.h"
 
 #include <thread>
 #include <vector>
@@ -10,8 +11,8 @@ namespace simple_tanks {
 	using namespace wnd_accelerator;
 
 	class GameField;
-
-	class Bullet : public GdiControl, public IBreakable {
+    //, public IBreakable
+	class Bullet : public GdiControl {
 		friend class GameField;
 		static const int kBulletSize;
 		static const int kStepSize;
@@ -22,14 +23,7 @@ namespace simple_tanks {
 			Right
 		};
 	public:
-		Bullet(Direction direction, GameField* gameField);
-
-		void MoveUp(bool moveUp);
-		void MoveDown(bool moveDown);
-		void MoveLeft(bool moveLeft);
-		void MoveRight(bool moveRight);
-		void MoveReset();
-
+		Bullet(GameField* gameField, Tank* tank);
 
 		virtual ~Bullet();
 

@@ -7,13 +7,13 @@ namespace simple_tanks {
 
 	struct IBreakable {
 
-		virtual Rect GetRect() = 0;
-		virtual int GetHealth() = 0;
-		virtual void SetHealth(int health) = 0;
+		virtual Rect GetRect(){}
+		virtual int GetHealth(){}
+		virtual void SetHealth(int health){}
 
-		virtual bool IsAlive() = 0;
+		virtual bool IsAlive(){}
 
-		virtual void TestBullet(Bullet* bullet) = 0;
+		//virtual void TestBullet(Bullet* bullet){}
 	};
 
 }

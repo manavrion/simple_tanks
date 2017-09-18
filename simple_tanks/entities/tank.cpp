@@ -35,15 +35,19 @@ namespace simple_tanks {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
                 if (moveUp && MoveTo(x, y - kStepSize)) {
                     tankTexture = tankTextureUp.get();
+                    direction = Direction::Up;
                 }
                 if (moveDown && MoveTo(x, y + kStepSize)) {
                     tankTexture = tankTextureDown.get();
+                    direction = Direction::Down;
                 }
                 if (moveLeft && MoveTo(x - kStepSize, y)) {
                     tankTexture = tankTextureLeft.get();
+                    direction = Direction::Left;
                 }
                 if (moveRight && MoveTo(x + kStepSize, y)) {
                     tankTexture = tankTextureRight.get();
+                    direction = Direction::Right;
                 }
             }
         }));
@@ -72,6 +76,10 @@ namespace simple_tanks {
         moveDown = false;
         moveLeft = false;
         moveRight = false;
+    }
+
+    void Tank::Shoot() {
+        gameField->SpawnBullet(this);
     }
 
     Tank::~Tank() {
