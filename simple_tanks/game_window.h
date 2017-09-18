@@ -9,8 +9,6 @@
 
 namespace simple_tanks {
 
-    using namespace Gdiplus;
-
     class GameWindow : public wnd_accelerator::Window {
     public:
         GameWindow() : currentMenu(Menu::main) {
@@ -73,11 +71,11 @@ namespace simple_tanks {
 
     protected:
 
-        void PaintChildBuffers(Graphics* graphics) {
+        void PaintChildBuffers(Graphics graphics) {
             if (((GameWindow*)menuMap[currentMenu])->paint) {
-                menuMap[currentMenu]->Paint();
+                menuMap[currentMenu]->Paint(graphics);
             }
-            graphics->DrawImage(((GameWindow*)menuMap[currentMenu])->buffer, menuMap[currentMenu]->GetRect());
+            //graphics.DrawImage(((GameWindow*)menuMap[currentMenu])->buffer, menuMap[currentMenu]->GetRect());
         }
 
     protected:

@@ -23,7 +23,7 @@ namespace simple_tanks {
 
         tankThread.reset(new std::thread([&]() {
             while (true) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
                 switch (move) {
                     case simple_tanks::Tank::Move::Null:
                         break;

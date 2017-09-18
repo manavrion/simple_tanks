@@ -73,12 +73,12 @@ namespace simple_tanks {
         bool IsValidTankPos(int x, int y);
 
 
-        virtual void PaintPre(Gdiplus::Graphics *graphics) final {
-            graphics->Clear(Color(0, 0, 0, 0));
-            graphics->DrawImage(tankTexture, 0, 0, width, height);
+        virtual void PaintPre(Graphics graphics) final {
+            //graphics.Clear(Color(0, 0, 0, 0));
+            //graphics.DrawImage(tankTexture, 0, 0, width, height);
         }
 
-        virtual void PaintPost(Gdiplus::Graphics *graphics) final {
+        virtual void PaintPost(Graphics graphics) final {
 
         }
 
