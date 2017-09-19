@@ -8,6 +8,7 @@ namespace simple_tanks {
 
     static GuiGameMainWindow* guiGameMainWindow = nullptr;
 
+    static bool restart = true;
 
     GuiGameMainWindow::GuiGameMainWindow() 
         : currentMenu(Menu::main), 
@@ -15,7 +16,7 @@ namespace simple_tanks {
 
         guiGameMainWindow = this;
 
-        Size size(800, 420);
+        Size size(800, 416);
 
         SetText("Battle City 20!8");
         SetSize(size);
@@ -37,7 +38,7 @@ namespace simple_tanks {
                          ->SetHeight(50)
                          ->SetText("Play")
                          ->SetX((800 / 2) - 150 / 2)
-                         ->SetY((420 / 2) - 50 / 2 + 100)
+                         ->SetY((416 / 2) - 50 / 2 + 100)
                          ->AddLeftMouseButtonReleaseListener(
         [&](Frame* frame, MouseEvent* e) {
             currentMenu = Menu::game;
@@ -98,6 +99,24 @@ namespace simple_tanks {
                           guiGameMainWindow->alwaysRepaint.end(), frame));
             guiGameMainWindow->mutex.unlock();
         }
+    }
+
+    GuiGameMainWindow* GuiGameMainWindow::GetInstance() {
+        return guiGameMainWindow;
+    }
+
+    bool GuiGameMainWindow::IsRestart() {
+        if (restart) {
+            restart = false;
+            return true;
+        }
+        return restart;
+    }
+
+    bool GuiGameMainWindow::Reclose() {
+        restart = true;
+        guiGameMainWindow->Close();
+        return true;
     }
 
     void GuiGameMainWindow::NotifyKeyListeners(KeyEvent* keyEvent) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "..\entities\tank.h"
+#include "..\entities\base.h"
 #include "..\entities\block.h"
 #include "..\entities\bullet.h"
 #include "..\entities\i_breakable.h"
@@ -32,11 +33,13 @@ namespace simple_tanks {
 
             for (auto& list : map) {
                 for (auto& block : list) {
-                    if (block.GetType() == Block::Type::brick) {
+                    if (block.GetType() != Block::Type::null) {
                         Rect b(block.GetX(), block.GetY(), Block::kBlockSize, Block::kBlockSize);
 
                         if (a.IntersectsWith(b)) {
-                            block.SetType(Block::Type::null);
+                            if (block.GetType() == Block::Type::brick) {
+                                block.SetType(Block::Type::null);
+                            }                            
                             collision = true;
                         }
                     }
@@ -50,6 +53,23 @@ namespace simple_tanks {
                     collision = true;
                 }
             }
+
+            for (auto ob : bullets) {
+                Rect b(ob->GetRect());
+                if (a.IntersectsWith(b) && ob != bullet) {
+                    ob->Damage();
+                    collision = true;
+                }
+            }
+
+            if (base) {
+                Rect b(base->GetRect());
+                if (a.IntersectsWith(b)) {
+                    base->Damage();
+                    collision = true;
+                }
+            }            
+
             if (collision) {
                 bullet->Damage();
             }
@@ -58,22 +78,30 @@ namespace simple_tanks {
 
     protected:
         virtual void PaintPre(Graphics graphics) final override;
+        virtual void PaintChildBuffers(Graphics graphics) final override;
         virtual void PaintPost(Graphics graphics) final override;
 
     protected:
         std::vector<std::vector<Block>> map;
         std::unique_ptr<Image> brickTexture;
+        std::unique_ptr<Image> rockTexture;
 
         std::unique_ptr<Bitmap> mapTexture;
 
         // Caching
         SolidBrush blackBrush;
         Gdiplus::TextureBrush brickBrush;
+        Gdiplus::TextureBrush rockBrush;
 
 
         // Map
         std::list<Tank*> tanks;
         std::list<Bullet*> bullets;
+        Tank* userTank;
+        Base* base;
+
+
+        bool gameover;
     };
 
 }

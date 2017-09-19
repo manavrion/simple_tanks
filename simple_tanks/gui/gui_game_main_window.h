@@ -16,6 +16,9 @@ namespace simple_tanks {
 
         static void AddDynamicObject(Frame* frame);
         static void EraseDynamicObject(Frame* frame);
+        static GuiGameMainWindow* GetInstance();
+        static bool IsRestart();
+        static bool Reclose();
                 
         virtual void NotifyKeyListeners(KeyEvent *keyEvent) final override;
         virtual void NotifyMouseListeners(MouseEvent *mouseEvent) final override;

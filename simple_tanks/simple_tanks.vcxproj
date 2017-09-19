@@ -210,6 +210,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="entities\base.h" />
     <ClInclude Include="entities\block.h" />
     <ClInclude Include="entities\bullet.h" />
     <ClInclude Include="entities\i_breakable.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="simple_tanks.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="entities\base.cpp" />
     <ClCompile Include="entities\block.cpp" />
     <ClCompile Include="entities\bullet.cpp" />
     <ClCompile Include="entities\tank.cpp" />

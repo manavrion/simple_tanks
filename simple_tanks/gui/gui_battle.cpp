@@ -8,7 +8,7 @@ namespace simple_tanks {
         SetBackground(Color::DimGray);
 
         GameField* gameField = new GameField();
-        gameField->SetPosition(800 / 2 - gameField->GetWidth() / 2, 420 / 2 - gameField->GetHeight() / 2);
+        gameField->SetPosition(800 / 2 - gameField->GetWidth() / 2, 0);
 
         Add(gameField);
     }

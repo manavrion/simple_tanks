@@ -50,6 +50,9 @@
     <ClInclude Include="entities\block.h">
       <Filter>entities</Filter>
     </ClInclude>
+    <ClInclude Include="entities\base.h">
+      <Filter>entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp" />
@@ -72,6 +75,9 @@
       <Filter>entities</Filter>
     </ClCompile>
     <ClCompile Include="entities\block.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="entities\base.cpp">
       <Filter>entities</Filter>
     </ClCompile>
   </ItemGroup>
