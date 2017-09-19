@@ -96,6 +96,11 @@ namespace simple_tanks {
 
         // Map
         std::list<Tank*> tanks;
+        std::mutex tanksMutex;
+        std::unique_ptr<std::thread> tanksSpawner;
+        bool tanksSpawnerTerminate;
+
+
         std::list<Bullet*> bullets;
         Tank* userTank;
         Base* base;

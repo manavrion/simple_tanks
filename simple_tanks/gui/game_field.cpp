@@ -23,7 +23,8 @@ namespace simple_tanks {
         blackBrush(Color::Black), 
         brickBrush(brickTexture.get()),
         rockBrush(rockTexture.get()),
-        map(kMapDim, std::vector<Block>(kMapDim, Block())) {
+        map(kMapDim, std::vector<Block>(kMapDim, Block())),
+        tanksSpawnerTerminate(false) {
 
         SetWidth(kBlockSize * kMapDim); //416
         SetHeight(kBlockSize * kMapDim); //416
@@ -49,7 +50,7 @@ namespace simple_tanks {
 
         // Tanks
 
-        Tank* userTank = new Tank(this, TankLayout::GetGreenTankLayout());
+        Tank* userTank = new Tank(this, TankLayout::GetGreenTankLayout(TankLayout::Direction::Up));
         this->userTank = userTank;
         tanks.push_back(userTank);
         userTank->MoveTo(4 * 4 * 8, 12 * 4 * 8);
@@ -89,6 +90,32 @@ namespace simple_tanks {
         Add(userTank);
 
 
+        // Enemy tanks spawner
+
+
+        tanksSpawner.reset(new std::thread([&]() {
+            while (!tanksSpawnerTerminate) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                tanksMutex.lock();
+
+                if (tanks.size() < 2) {
+                    Tank* enemy = new Tank(this, TankLayout::GetWhiteTankLayout(TankLayout::Direction::Down));
+                    tanks.push_back(enemy);
+                    enemy->MoveTo(12 * 32, 0 * 32);
+                    Add(enemy);
+                }
+
+                tanksMutex.unlock();
+            }
+        }));
+
+
+
+
+
+
+
+
 
         AddKeyReleaseListener([&](Frame* frame, KeyEvent* keyEvent) {
             if ((keyEvent->keyCode == KeyEvent::KeyCodes::space) && gameover && GuiGameMainWindow::GetInstance()) {
@@ -98,7 +125,10 @@ namespace simple_tanks {
     }
 
 
-    GameField::~GameField() {}
+    GameField::~GameField() {
+        tanksSpawnerTerminate = true;
+        tanksSpawner->join();
+    }
 
 
 
@@ -142,7 +172,7 @@ namespace simple_tanks {
             }
         } while (b != nullptr);
         
-
+        tanksMutex.lock();
         Tank* t = nullptr;
         do {
             t = nullptr;
@@ -161,6 +191,7 @@ namespace simple_tanks {
                 delete t;
             }
         } while (t != nullptr);
+        tanksMutex.unlock();
 
 
         if (base && !base->IsAlive()) {

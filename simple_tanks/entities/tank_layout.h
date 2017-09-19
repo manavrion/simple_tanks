@@ -9,15 +9,22 @@ namespace simple_tanks {
     public:
         ~TankLayout();
 
-        static TankLayout* GetGreenTankLayout();
-        static TankLayout* GetWhiteTankLayout();
+        enum class Direction {
+            Up,
+            Down,
+            Left,
+            Right
+        };
+
+        static TankLayout* GetGreenTankLayout(Direction direction);
+        static TankLayout* GetWhiteTankLayout(Direction direction);
 
         void MoveUp();
         void MoveDown();
         void MoveLeft();
         void MoveRight();
 
-        Image* GetTankSprite();
+        Image* GetTankSprite();        
 
     protected:
         TankLayout(Image* tankTextureUp,
@@ -27,7 +34,8 @@ namespace simple_tanks {
                    Image* tankTextureTUp,
                    Image* tankTextureTDown,
                    Image* tankTextureTLeft,
-                   Image* tankTextureTRight);
+                   Image* tankTextureTRight,
+                   Direction direction);
 
         void Move();
 
