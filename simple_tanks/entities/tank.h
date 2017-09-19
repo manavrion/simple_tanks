@@ -1,6 +1,7 @@
 #pragma once
 #include "gdi_render\gdi_control.h"
 #include "i_breakable.h"
+#include "tank_layout.h"
 
 #include <thread>
 #include <vector>
@@ -23,7 +24,7 @@ namespace simple_tanks {
             Right
         };
     public:
-        Tank(GameField* gameField);
+        Tank(GameField* gameField, TankLayout* tankLayout);
 
         void MoveUp(bool moveUp);
         void MoveDown(bool moveDown);
@@ -68,7 +69,7 @@ namespace simple_tanks {
 
 
         virtual void PaintPre(Graphics graphics) final override {
-            graphics.DrawImage(tankTexture, 0, 0, width, height);
+            graphics.DrawImage(tankLayout->GetTankSprite(), 0, 0, width, height);
         }
 
         virtual void PaintPost(Graphics graphics) final override {}
@@ -82,12 +83,7 @@ namespace simple_tanks {
 
         GameField* gameField;
 
-
-        Image* tankTexture;
-        std::unique_ptr<Image> tankTextureUp;
-        std::unique_ptr<Image> tankTextureDown;
-        std::unique_ptr<Image> tankTextureLeft;
-        std::unique_ptr<Image> tankTextureRight;
+        std::unique_ptr<TankLayout> tankLayout;
 
         std::unique_ptr<std::thread> tankThread;
         volatile bool tankThreadTerminate;

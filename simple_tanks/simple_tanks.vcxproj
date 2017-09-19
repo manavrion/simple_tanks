@@ -229,6 +229,7 @@
     <ClCompile Include="entities\block.cpp" />
     <ClCompile Include="entities\bullet.cpp" />
     <ClCompile Include="entities\tank.cpp" />
+    <ClCompile Include="entities\tank_layout.cpp" />
     <ClCompile Include="gui\game_field.cpp" />
     <ClCompile Include="gui\gui_battle.cpp" />
     <ClCompile Include="gui\gui_game_main_window.cpp" />

@@ -80,6 +80,9 @@
     <ClCompile Include="entities\base.cpp">
       <Filter>entities</Filter>
     </ClCompile>
+    <ClCompile Include="entities\tank_layout.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\battle_city.png">

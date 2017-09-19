@@ -11,11 +11,8 @@ namespace simple_tanks {
     const int Tank::kTankSize = 32;
     const int Tank::kStepSize = 1;
     
-    Tank::Tank(GameField* gameField) :
-        tankTextureUp(new Image(L"resources/g_tank_l1_u.png")),
-        tankTextureDown(new Image(L"resources/g_tank_l1_d.png")),
-        tankTextureLeft(new Image(L"resources/g_tank_l1_l.png")),
-        tankTextureRight(new Image(L"resources/g_tank_l1_r.png")),
+    Tank::Tank(GameField* gameField, TankLayout* tankLayout) :
+        tankLayout(tankLayout),
         tankThreadTerminate(false),
         gameField(gameField),
         direction(Direction::Up),
@@ -28,12 +25,10 @@ namespace simple_tanks {
         SetWidth(kTankSize);
         SetHeight(kTankSize);
 
-        tankTexture = tankTextureUp.get();
-
 
         tankThread.reset(new std::thread([&]() {
             while (!tankThreadTerminate) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
                 
                 if (moveUp && moveDown) {
                     moveUp = false;
@@ -52,40 +47,40 @@ namespace simple_tanks {
 
                 if (count > 1) {
                     if (moveUp && MoveTo(x, y - kStepSize)) {
-                        tankTexture = tankTextureUp.get();
+                        this->tankLayout->MoveUp();
                         direction = Direction::Up;
                     }
                     if (moveDown && MoveTo(x, y + kStepSize)) {
-                        tankTexture = tankTextureDown.get();
+                        this->tankLayout->MoveDown();
                         direction = Direction::Down;
                     }
                     if (moveLeft && MoveTo(x - kStepSize, y)) {
-                        tankTexture = tankTextureLeft.get();
+                        this->tankLayout->MoveLeft();
                         direction = Direction::Left;
                     }
                     if (moveRight && MoveTo(x + kStepSize, y)) {
-                        tankTexture = tankTextureRight.get();
+                        this->tankLayout->MoveRight();
                         direction = Direction::Right;
                     }
                 } else {
                     if (moveUp) {
                         MoveTo(x, y - kStepSize);
-                        tankTexture = tankTextureUp.get();
+                        this->tankLayout->MoveUp();
                         direction = Direction::Up;
                     }
                     if (moveDown) {
                         MoveTo(x, y + kStepSize);
-                        tankTexture = tankTextureDown.get();
+                        this->tankLayout->MoveDown();
                         direction = Direction::Down;
                     }
                     if (moveLeft) {
                         MoveTo(x - kStepSize, y);
-                        tankTexture = tankTextureLeft.get();
+                        this->tankLayout->MoveLeft();
                         direction = Direction::Left;
                     }
                     if (moveRight) {
                         MoveTo(x + kStepSize, y);
-                        tankTexture = tankTextureRight.get();
+                        this->tankLayout->MoveRight();
                         direction = Direction::Right;
                     }
                 }

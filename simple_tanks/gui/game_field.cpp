@@ -3,9 +3,11 @@
 #include "gdi_render\g_button.h"
 #include "..\entities\bullet.h"
 #include "gui_game_main_window.h"
+#include "..\entities\tank_layout.h"
 
 #include <unordered_map>
 #include <string>
+#include <utility>
 
 namespace simple_tanks {
 
@@ -47,7 +49,7 @@ namespace simple_tanks {
 
         // Tanks
 
-        Tank* userTank = new Tank(this);
+        Tank* userTank = new Tank(this, TankLayout::GetGreenTankLayout());
         this->userTank = userTank;
         tanks.push_back(userTank);
         userTank->MoveTo(4 * 4 * 8, 12 * 4 * 8);
