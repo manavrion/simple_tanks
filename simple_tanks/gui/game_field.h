@@ -14,6 +14,7 @@ namespace simple_tanks {
     class GameField : public GdiControl {
         friend class Tank;
 		friend class Bullet;
+        friend class Block;
         static const int kMapDim;
         static const int kBlockSize;
 
@@ -24,7 +25,36 @@ namespace simple_tanks {
         
         void SpawnBullet(Tank* tank);
 
+        void TestBullet(Bullet* bullet) {
+            bool collision = false;
 
+            Rect a(bullet->GetRect());
+
+            for (auto& list : map) {
+                for (auto& block : list) {
+                    if (block.GetType() == Block::Type::brick) {
+                        Rect b(block.GetX(), block.GetY(), Block::kBlockSize, Block::kBlockSize);
+
+                        if (a.IntersectsWith(b)) {
+                            block.SetType(Block::Type::null);
+                            collision = true;
+                        }
+                    }
+                }
+            }
+
+            for (auto tank : tanks) {
+                Rect b(tank->GetRect());
+                if (a.IntersectsWith(b) && !bullet->IsOwner(tank)) {
+                    tank->Damage();
+                    collision = true;
+                }
+            }
+            if (collision) {
+                bullet->Damage();
+            }
+
+        }
 
     protected:
         virtual void PaintPre(Graphics graphics) final override;
@@ -39,6 +69,11 @@ namespace simple_tanks {
         // Caching
         SolidBrush blackBrush;
         Gdiplus::TextureBrush brickBrush;
+
+
+        // Map
+        std::list<Tank*> tanks;
+        std::list<Bullet*> bullets;
     };
 
 }

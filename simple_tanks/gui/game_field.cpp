@@ -17,7 +17,7 @@ namespace simple_tanks {
         brickTexture(new Image(L"resources/block.png")),        
         blackBrush(Color::Black), 
         brickBrush(brickTexture.get()),
-        map(kMapDim, std::vector<Block>(kMapDim, { Block::Type::null })) {
+        map(kMapDim, std::vector<Block>(kMapDim, Block())) {
 
         SetWidth(kBlockSize * kMapDim); //416
         SetHeight(kBlockSize * kMapDim); //416
@@ -28,9 +28,9 @@ namespace simple_tanks {
                 Color color;
                 mapTexture->GetPixel(i, j, &color);
                 if (color.GetValue() == Color::Red) {
-                    map[i][j].type = Block::Type::brick;
+                    map[i][j].SetType(Block::Type::brick);
                 }
-				//map[i][j].SetPos(i*kBlockSize, j*kBlockSize);
+				map[i][j].SetPos(i*kBlockSize, j*kBlockSize);
             }
         }
 
@@ -38,6 +38,7 @@ namespace simple_tanks {
         // Tanks
 
         Tank* userTank = new Tank(this);
+        tanks.push_back(userTank);
         userTank->MoveTo(4 * 4 * 8, 12 * 4 * 8);
 
         auto manip = [](KeyEvent* keyEvent, Tank* tank, bool act) {
@@ -81,11 +82,47 @@ namespace simple_tanks {
 
 
     void GameField::SpawnBullet(Tank* tank) {
-        Add(new Bullet(this, tank));
+        Bullet* b = new Bullet(this, tank);
+        bullets.push_back(b);
+        Add(b);
     }
 
 
     void GameField::PaintPre(Graphics graphics) {
+
+        // Garbage remove
+        Bullet* b = nullptr;
+        do {
+            b = nullptr;
+            for (auto ob : bullets) {
+                if (!ob->IsAlive()) {
+                    b = ob;
+                }
+            }
+            if (b != nullptr) {
+                bullets.erase(std::find(bullets.begin(), bullets.end(), b));
+                Erase(b);
+                delete b;
+            }
+        } while (b != nullptr);
+        
+
+        Tank* t = nullptr;
+        do {
+            t = nullptr;
+            for (auto ob : tanks) {
+                if (!ob->IsAlive()) {
+                    t = ob;
+                }
+            }
+            if (t != nullptr) {
+                tanks.erase(std::find(tanks.begin(), tanks.end(), t));
+                Erase(t);
+                delete t;
+            }
+        } while (t != nullptr);
+
+
         graphics.FillRectangle(&blackBrush, Rect(0, 0, width, height));
 
         
@@ -94,7 +131,7 @@ namespace simple_tanks {
             for (size_t j = 0; j < map[i].size(); j++) {
                 int x = i * kBlockSize;
                 int y = j * kBlockSize;
-                if (map[i][j].type == Block::Type::brick) {
+                if (map[i][j].GetType() == Block::Type::brick) {
                     graphics.FillRectangle(&brickBrush, Rect(x, y, kBlockSize, kBlockSize));
                 }
             }

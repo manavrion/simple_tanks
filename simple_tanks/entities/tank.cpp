@@ -22,7 +22,8 @@ namespace simple_tanks {
         moveUp(false),
         moveDown(false),
         moveLeft(false),
-        moveRight(false) {
+        moveRight(false),
+        health(1) {
 
         SetWidth(kTankSize);
         SetHeight(kTankSize);
@@ -153,7 +154,7 @@ namespace simple_tanks {
 
         for (int i = x; i <= width; i++) {
             for (int j = y; j <= height; j++) {
-                if (gameField->map[i][j].type != Block::Type::null) {
+                if (gameField->map[i][j].GetType() != Block::Type::null) {
                     return false;
                 }
             }

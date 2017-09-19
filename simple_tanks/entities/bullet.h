@@ -1,6 +1,5 @@
 #pragma once
 #include "gdi_render\gdi_control.h"
-#include "tank.h"
 #include "i_breakable.h"
 
 #include <thread>
@@ -11,8 +10,9 @@ namespace simple_tanks {
 	using namespace wnd_accelerator;
 
 	class GameField;
+    class Tank;
     //, public IBreakable
-	class Bullet : public GdiControl {
+	class Bullet : public GdiControl, public IBreakable {
 		friend class GameField;
 		static const int kBulletSize;
 		static const int kStepSize;
@@ -27,16 +27,21 @@ namespace simple_tanks {
 
 		virtual ~Bullet();
 
+        bool IsAlive() {
+            return alive;
+        }
+
+        virtual void Damage() {
+            alive = false;
+        }
+
+        virtual bool IsOwner(Tank* tank) {
+            return tank == owner;
+        }
+
 	protected:
 
-		bool MoveTo(int x, int y) {
-			if (IsValidBulletPos(x, y)) {
-				this->x = x;
-				this->y = y;
-				return true;
-			}
-			return false;
-		}
+        bool MoveTo(int x, int y);
 
 		bool IsValidBulletPos(int x, int y);
 
@@ -60,6 +65,9 @@ namespace simple_tanks {
 
 		std::unique_ptr<std::thread> bulletThread;
 		volatile bool bulletThreadTerminate;
+
+        bool alive;
+        Tank* owner;
 	};
 
 }

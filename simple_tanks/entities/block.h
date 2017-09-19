@@ -1,15 +1,38 @@
 #pragma once
 
-namespace wnd_accelerator {
+namespace simple_tanks {
 
-    struct Block {
+    class Block {
+    public:
+        static const int kBlockSize;
         enum class Type {
             null,
             brick,
             rock
         };
+    public:
+        Block();
+        ~Block();
 
+
+        Type GetType();
+
+        void SetType(Type type);
+
+        void SetPos(int x, int y);
+
+        int GetX() {
+            return x;
+        }
+
+        int GetY() {
+            return y;
+        }
+
+    protected:
         Type type;
+        int x;
+        int y;
     };
 
 }

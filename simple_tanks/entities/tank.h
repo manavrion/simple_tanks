@@ -1,5 +1,6 @@
 #pragma once
 #include "gdi_render\gdi_control.h"
+#include "i_breakable.h"
 
 #include <thread>
 #include <vector>
@@ -10,7 +11,7 @@ namespace simple_tanks {
 
     class GameField;
 
-    class Tank : public GdiControl {
+    class Tank : public GdiControl, public IBreakable {
         friend class GameField;
         static const int kTankSize;
         static const int kStepSize;
@@ -31,6 +32,18 @@ namespace simple_tanks {
         void MoveReset();
 
         void Shoot();
+
+
+
+        virtual bool IsAlive() {
+            if (health > 0) {
+                return true;
+            }
+            return false;
+        }
+        virtual void Damage() {
+            health--;
+        }
 
 
         virtual ~Tank();
@@ -78,6 +91,8 @@ namespace simple_tanks {
 
         std::unique_ptr<std::thread> tankThread;
         volatile bool tankThreadTerminate;
+
+        int health;
     };
 
 }

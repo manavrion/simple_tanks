@@ -71,6 +71,9 @@
     <ClCompile Include="entities\bullet.cpp">
       <Filter>entities</Filter>
     </ClCompile>
+    <ClCompile Include="entities\block.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\battle_city.png">

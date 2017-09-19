@@ -1,5 +1,6 @@
 #include "bullet.h"
 
+#include "tank.h"
 #include "..\gui\game_field.h"
 #include "..\gui\gui_game_main_window.h"
 
@@ -18,7 +19,9 @@ namespace simple_tanks {
 		bulletTextureRight(new Image(L"resources/g_bullet_r.png")),
 		bulletThreadTerminate(false),
 		gameField(gameField),
-		direction(direction) {
+		direction(direction),
+        alive(true),
+        owner(tank) {
 
         SetX(tank->GetX());
         SetY(tank->GetY());
@@ -55,22 +58,26 @@ namespace simple_tanks {
 
 		bulletThread.reset(new std::thread([&]() {
 			while (!bulletThreadTerminate) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+				std::this_thread::sleep_for(std::chrono::milliseconds(40));
+                bool live = false;
                 switch (direction) {
                     case simple_tanks::Bullet::Direction::Up:
-                        MoveTo(x, y - kStepSize);
+                        live = MoveTo(x, y - kStepSize);
                         break;
                     case simple_tanks::Bullet::Direction::Down:
-                        MoveTo(x, y + kStepSize);
+                        live = MoveTo(x, y + kStepSize);
                         break;
                     case simple_tanks::Bullet::Direction::Left:
-                        MoveTo(x - kStepSize, y);
+                        live = MoveTo(x - kStepSize, y);
                         break;
                     case simple_tanks::Bullet::Direction::Right:
-                        MoveTo(x + kStepSize, y);
+                        live = MoveTo(x + kStepSize, y);
                         break;
                     default:
                         break;
+                }
+                if (!live) {
+                    alive = false;
                 }
 			}
 		}));
@@ -85,7 +92,17 @@ namespace simple_tanks {
 		bulletThread->join();
 	}
 
-	bool Bullet::IsValidBulletPos(int x, int y) {
+    bool Bullet::MoveTo(int x, int y) {
+        if (IsValidBulletPos(x, y)) {
+            gameField->TestBullet(this);
+            this->x = x;
+            this->y = y;
+            return true;
+        }
+        return false;
+    }
+
+    bool Bullet::IsValidBulletPos(int x, int y) {
 		int width = x + kBulletSize;
 		int height = y + kBulletSize;
 
@@ -97,24 +114,6 @@ namespace simple_tanks {
 			return false;
 		}
 
-
-		x /= gameField->kBlockSize;
-		y /= gameField->kBlockSize;
-
-		width = (width - gameField->kBlockSize + 7) / gameField->kBlockSize;
-		height = (height - gameField->kBlockSize + 7) / gameField->kBlockSize;
-
-		if (width >= gameField->map.size() || height >= gameField->map.size()) {
-			return false;
-		}
-
-		for (int i = x; i <= width; i++) {
-			for (int j = y; j <= height; j++) {
-				if (gameField->map[i][j].type != Block::Type::null) {
-					return false;
-				}
-			}
-		}
 		return true;
 	}
 

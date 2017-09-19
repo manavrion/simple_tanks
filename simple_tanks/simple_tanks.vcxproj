@@ -224,6 +224,7 @@
     <ClInclude Include="simple_tanks.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="entities\block.cpp" />
     <ClCompile Include="entities\bullet.cpp" />
     <ClCompile Include="entities\tank.cpp" />
     <ClCompile Include="gui\game_field.cpp" />
