@@ -12,6 +12,8 @@
 namespace simple_tanks {
     using namespace wnd_accelerator;
 
+    struct Node;
+
     class GameField : public GdiControl {
         friend class Tank;
 		friend class Bullet;
@@ -107,6 +109,16 @@ namespace simple_tanks {
 
 
         bool gameover;
+
+
+
+        // Graph for bot
+        std::unique_ptr<std::thread> worldStateRegenerator;
+        bool worldStateRegeneratorTerminate;
+
+        std::vector<std::vector<Node>> nodemap;
+
+
     };
 
 }

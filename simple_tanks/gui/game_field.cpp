@@ -11,6 +11,22 @@
 
 namespace simple_tanks {
 
+    struct Node {
+        enum Type {
+            null,
+            brick,
+            rock,
+            base
+        };
+        Type type;
+        Node* up;
+        Node* down;
+        Node* left;
+        Node* right;
+    };
+
+
+
 
     const int GameField::kMapDim = 13*4;
     const int GameField::kBlockSize = 8;
@@ -24,7 +40,9 @@ namespace simple_tanks {
         brickBrush(brickTexture.get()),
         rockBrush(rockTexture.get()),
         map(kMapDim, std::vector<Block>(kMapDim, Block())),
-        tanksSpawnerTerminate(false) {
+        nodemap(kMapDim / 4, std::vector<Node>(kMapDim / 4)),
+        tanksSpawnerTerminate(false),
+        worldStateRegeneratorTerminate(false) {
 
         SetWidth(kBlockSize * kMapDim); //416
         SetHeight(kBlockSize * kMapDim); //416
@@ -87,6 +105,12 @@ namespace simple_tanks {
             manip(keyEvent, (Tank*)frame, false);
         });
         
+
+        AddLeftMouseButtonPressListener([=](Frame* frame, MouseEvent* keyEvent) {
+            ((Tank*)frame)->AutoMoveTo(keyEvent->xAbs - (800 - this->GetWidth()) / 2, keyEvent->yAbs);
+        });
+
+
         Add(userTank);
 
 
@@ -111,7 +135,61 @@ namespace simple_tanks {
 
 
 
+        // World state regenerator
 
+        for (int i = 0; i < nodemap.size(); i++) {
+            for (int j = 0; j < nodemap.size(); j++) {
+                Node& node = nodemap[i][j];
+                if (i - 1 >= 0) {
+                    node.left = &nodemap[i-1][j];
+                }
+                if (i + 1 < nodemap.size()) {
+                    node.right = &nodemap[i+1][j];
+                }
+                if (j - 1 >= 0) {
+                    node.up = &nodemap[i][j-1];
+                }
+                if (j + 1 < nodemap.size()) {
+                    node.down = &nodemap[i][j+1];
+                }
+            }
+        }
+
+
+        worldStateRegenerator.reset(new std::thread([&]() {
+
+            while (!worldStateRegeneratorTerminate) {
+                std::this_thread::sleep_for(std::chrono::seconds(5));
+
+                for (int i = 0; i < map.size(); i += 4) {
+                    for (int j = 0; j < map[i].size(); j += 4) {
+
+                        bool isNull = true;
+                        for (int k = i; k < i + 4 && isNull; k++) {
+                            for (int l = j; l < j + 4 && isNull; l++) {
+                                if (map[k][l].GetType() != Block::Type::null) {
+                                    isNull = false;
+                                }
+                            }
+                        }
+                        if (isNull) {
+                            nodemap[i / 4][j / 4].type = Node::Type::null;
+                        } else {
+                            nodemap[i / 4][j / 4].type = Node::Type::brick;
+                        }
+
+                    }
+                }
+
+                nodemap[6][12].type = Node::Type::base;
+
+
+            }
+            
+
+
+
+        }));
 
 
 
@@ -127,6 +205,7 @@ namespace simple_tanks {
 
     GameField::~GameField() {
         tanksSpawnerTerminate = true;
+        worldStateRegeneratorTerminate = true;
         tanksSpawner->join();
     }
 

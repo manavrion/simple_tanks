@@ -54,6 +54,15 @@ namespace simple_tanks {
             return direction;
         }
 
+
+
+        // Auto move
+
+        void AutoMoveTo(int x, int y) {
+
+        }
+
+
     protected:
 
         bool MoveTo(int x, int y) {
