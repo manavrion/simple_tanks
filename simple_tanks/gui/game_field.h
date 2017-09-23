@@ -33,20 +33,36 @@ namespace simple_tanks {
 
             Rect a(bullet->GetRect());
 
+            Rect aForMap(a.X - 11, a.Y - 11, a.Width + 22, a.Height + 22);
+
             for (auto& list : map) {
                 for (auto& block : list) {
                     if (block.GetType() != Block::Type::null) {
                         Rect b(block.GetX(), block.GetY(), Block::kBlockSize, Block::kBlockSize);
-
-                        if (a.IntersectsWith(b)) {
-                            if (block.GetType() == Block::Type::brick) {
-                                block.SetType(Block::Type::null);
-                            }                            
+                        if (a.IntersectsWith(b)) {                       
                             collision = true;
                         }
                     }
                 }
             }
+            if (collision) {
+                for (auto& list : map) {
+                    for (auto& block : list) {
+                        if (block.GetType() != Block::Type::null) {
+                            Rect b(block.GetX(), block.GetY(), Block::kBlockSize, Block::kBlockSize);
+
+                            if (aForMap.IntersectsWith(b)) {
+                                if (block.GetType() == Block::Type::brick) {
+                                    block.SetType(Block::Type::null);
+                                }
+                                collision = true;
+
+                            }
+                        }
+                    }
+                }
+            }
+            
 
             for (auto tank : tanks) {
                 Rect b(tank->GetRect());

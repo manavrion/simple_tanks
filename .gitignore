@@ -264,3 +264,6 @@ __pycache__/
 /.lib
 /.dist_x86_Debug
 /.dist_x86_Release
+/nw/Exe/prolog.err
+/nw/Exe/nw.lib
+/nw/Exe/nw.dll

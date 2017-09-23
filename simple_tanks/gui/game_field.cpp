@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include <utility>
+#include <fstream>
 
 namespace simple_tanks {
 
@@ -23,6 +24,9 @@ namespace simple_tanks {
         Node* down;
         Node* left;
         Node* right;
+        int x;
+        int y;
+        std::string name;
     };
 
 
@@ -152,14 +156,18 @@ namespace simple_tanks {
                 if (j + 1 < nodemap.size()) {
                     node.down = &nodemap[i][j+1];
                 }
+                node.x = i*kBlockSize*4;
+                node.y = j*kBlockSize*4;
             }
         }
 
 
         worldStateRegenerator.reset(new std::thread([&]() {
 
+            
+
             while (!worldStateRegeneratorTerminate) {
-                std::this_thread::sleep_for(std::chrono::seconds(5));
+                std::ofstream cout("map.txt");
 
                 for (int i = 0; i < map.size(); i += 4) {
                     for (int j = 0; j < map[i].size(); j += 4) {
@@ -180,9 +188,68 @@ namespace simple_tanks {
 
                     }
                 }
-
                 nodemap[6][12].type = Node::Type::base;
+                if (nodemap[5][12].type != Node::Type::null) {
+                    nodemap[5][12].type = Node::Type::base;
+                }
+                if (nodemap[7][12].type != Node::Type::null) {
+                    nodemap[7][12].type = Node::Type::base;
+                }
+                if (nodemap[6][11].type != Node::Type::null) {
+                    nodemap[6][11].type = Node::Type::base;
+                }
 
+
+                // Import to db
+                for (int i = 0; i < nodemap.size(); i++) {
+                    for (int j = 0; j < nodemap[i].size(); j++) {
+                        if (nodemap[i][j].type == Node::Type::base) {
+                            cout << "types(node(" << i << ", " << j << "), base)\n";
+                        } else if (nodemap[i][j].type == Node::Type::null) {
+                            cout << "types(node(" << i << ", " << j << "), road)\n";
+                        }
+                        
+                    }
+                }
+
+
+                int sz = nodemap.size();
+                for (int i = 0; i < nodemap.size(); i++) {
+                    for (int j = 0; j < nodemap[i].size(); j++) {
+                        if (nodemap[i][j].type == Node::Type::brick || nodemap[i][j].type == Node::Type::rock) {
+                            continue;
+                        }
+                        if (i-1>=0 && nodemap[i-1][j].type == Node::Type::null) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i-1 << ", " << j << ")), " << "left)\n";
+                        }
+                        if (i+1<sz && nodemap[i+1][j].type == Node::Type::null) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i+1 << ", " << j << ")), " << "right)\n";
+                        }
+                        if (j-1>=0 && nodemap[i][j-1].type == Node::Type::null) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j-1 << ")), " << "up)\n";
+                        }
+                        if (j+1<sz && nodemap[i][j+1].type == Node::Type::null) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j+1 << ")), " << "down)\n";
+                        }
+                        if (i - 1 >= 0 && nodemap[i - 1][j].type == Node::Type::base) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i - 1 << ", " << j << ")), " << "left)\n";
+                        }
+                        if (i + 1<sz && nodemap[i + 1][j].type == Node::Type::base) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i + 1 << ", " << j << ")), " << "right)\n";
+                        }
+                        if (j - 1 >= 0 && nodemap[i][j - 1].type == Node::Type::base) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j - 1 << ")), " << "up)\n";
+                        }
+                        if (j + 1<sz && nodemap[i][j + 1].type == Node::Type::base) {
+                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j + 1 << ")), " << "down)\n";
+                        }
+                    }
+                }
+
+                //cout << std::endl;
+
+                cout.close();
+                std::this_thread::sleep_for(std::chrono::seconds(2));
 
             }
             
@@ -298,6 +365,22 @@ namespace simple_tanks {
                 }
             }
         }
+
+        SolidBrush brush(Color(50, 0, 255, 0));
+        SolidBrush bbrush(Color(50, 0, 0, 255));
+#if _DEBUG
+        for (int i = 0; i < nodemap.size(); i++) {
+            for (int j = 0; j < nodemap.size(); j++) {
+                Node &node = nodemap[i][j];
+                if (node.type == node.null) {
+                    graphics.FillRectangle(&brush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
+                }
+                if (node.type == node.base) {
+                    graphics.FillRectangle(&bbrush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
+                }
+            }
+        }
+#endif
 
     }
 
