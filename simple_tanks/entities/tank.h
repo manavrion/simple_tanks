@@ -2,6 +2,7 @@
 #include "gdi_render\gdi_control.h"
 #include "i_breakable.h"
 #include "tank_layout.h"
+#include "direction.h"
 
 #include <thread>
 #include <vector>
@@ -17,14 +18,11 @@ namespace simple_tanks {
         static const int kTankSize;
         static const int kStepSize;
     public:
-        enum class Direction {
-            Up,
-            Down,
-            Left,
-            Right
-        };
-    public:
         Tank(GameField* gameField, TankLayout* tankLayout);
+
+        Tank(GameField* gameField, TankLayout* tankLayout, std::vector<Direction> commands);
+
+        
 
         void MoveUp(bool moveUp);
         void MoveDown(bool moveDown);
@@ -96,6 +94,8 @@ namespace simple_tanks {
 
         std::unique_ptr<std::thread> tankThread;
         volatile bool tankThreadTerminate;
+
+        std::vector<Direction> commands;
 
         int health;
     };

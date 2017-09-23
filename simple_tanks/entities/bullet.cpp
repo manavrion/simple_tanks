@@ -19,7 +19,7 @@ namespace simple_tanks {
 		bulletTextureRight(new Image(L"resources/g_bullet_r.png")),
 		bulletThreadTerminate(false),
 		gameField(gameField),
-		direction(direction),
+		direction(tank->GetDirection()),
         alive(true),
         owner(tank) {
 
@@ -29,28 +29,28 @@ namespace simple_tanks {
         SetHeight(kBulletSize);
 
         switch (tank->GetDirection()) {
-            case Tank::Direction::Up:
+            case Direction::up:
                 y -= kBulletSize;
                 x += 11;
-                direction = Direction::Up;
+                direction = Direction::up;
                 bulletTexture = bulletTextureUp.get();
                 break;
-            case Tank::Direction::Down:
+            case Direction::down:
                 y += tank->GetHeight();
                 x += 11;
-                direction = Direction::Down;
+                direction = Direction::down;
                 bulletTexture = bulletTextureDown.get();
                 break;
-            case Tank::Direction::Left:
+            case Direction::left:
                 x -= kBulletSize;
                 y += 11;
-                direction = Direction::Left;
+                direction = Direction::left;
                 bulletTexture = bulletTextureLeft.get();
                 break;
-            case Tank::Direction::Right:
+            case Direction::right:
                 x += tank->GetWidth();
                 y += 11;
-                direction = Direction::Right;
+                direction = Direction::right;
                 bulletTexture = bulletTextureRight.get();
                 break;
         }
@@ -61,16 +61,16 @@ namespace simple_tanks {
 				std::this_thread::sleep_for(std::chrono::milliseconds(4));
                 bool live = false;
                 switch (direction) {
-                    case simple_tanks::Bullet::Direction::Up:
+                    case Direction::up:
                         live = MoveTo(x, y - kStepSize);
                         break;
-                    case simple_tanks::Bullet::Direction::Down:
+                    case Direction::down:
                         live = MoveTo(x, y + kStepSize);
                         break;
-                    case simple_tanks::Bullet::Direction::Left:
+                    case Direction::left:
                         live = MoveTo(x - kStepSize, y);
                         break;
-                    case simple_tanks::Bullet::Direction::Right:
+                    case Direction::right:
                         live = MoveTo(x + kStepSize, y);
                         break;
                     default:

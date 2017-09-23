@@ -4,6 +4,7 @@
 #include "..\entities\block.h"
 #include "..\entities\bullet.h"
 #include "..\entities\i_breakable.h"
+#include "..\entities\direction.h"
 #include "gdi_render\gdi_control.h"
 
 #include <vector>

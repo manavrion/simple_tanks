@@ -1,6 +1,7 @@
 #pragma once
 #include "gdi_render\gdi_control.h"
 #include "i_breakable.h"
+#include "direction.h"
 
 #include <thread>
 #include <vector>
@@ -16,12 +17,6 @@ namespace simple_tanks {
 		friend class GameField;
 		static const int kBulletSize;
 		static const int kStepSize;
-		enum class Direction {
-			Up,
-			Down,
-			Left,
-			Right
-		};
 	public:
 		Bullet(GameField* gameField, Tank* tank);
 
@@ -53,7 +48,7 @@ namespace simple_tanks {
 		virtual void PaintPost(Graphics graphics) final override {}
 
 	protected:
-		volatile Direction direction;
+		Direction direction;
 
 		GameField* gameField;
 

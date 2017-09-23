@@ -53,6 +53,9 @@
     <ClInclude Include="entities\base.h">
       <Filter>entities</Filter>
     </ClInclude>
+    <ClInclude Include="entities\direction.h">
+      <Filter>entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simple_tanks.cpp" />

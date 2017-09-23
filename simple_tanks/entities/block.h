@@ -1,4 +1,5 @@
 #pragma once
+#include "direction.h"
 
 namespace simple_tanks {
 

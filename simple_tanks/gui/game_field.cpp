@@ -122,7 +122,8 @@ namespace simple_tanks {
 
 
         tanksSpawner.reset(new std::thread([&]() {
-            while (!tanksSpawnerTerminate) {
+            //DEPRECATED
+            /*while (!tanksSpawnerTerminate) {
                 std::this_thread::sleep_for(std::chrono::seconds(1));
                 tanksMutex.lock();
 
@@ -134,7 +135,7 @@ namespace simple_tanks {
                 }
 
                 tanksMutex.unlock();
-            }
+            }*/
         }));
 
 
@@ -164,96 +165,157 @@ namespace simple_tanks {
 
         worldStateRegenerator.reset(new std::thread([&]() {
 
-            
+            HMODULE hLib = LoadLibrary("nw.dll");
+
+            void(*pFunction)(int, int);
+            (FARPROC &)pFunction = GetProcAddress(hLib, "updateNodes");
 
             while (!worldStateRegeneratorTerminate) {
-                std::ofstream cout("map.txt");
 
-                for (int i = 0; i < map.size(); i += 4) {
-                    for (int j = 0; j < map[i].size(); j += 4) {
+                if (tanks.size() < 2) {
 
-                        bool isNull = true;
-                        for (int k = i; k < i + 4 && isNull; k++) {
-                            for (int l = j; l < j + 4 && isNull; l++) {
-                                if (map[k][l].GetType() != Block::Type::null) {
-                                    isNull = false;
+                    std::ofstream cout("map.txt");
+
+                    for (int i = 0; i < map.size(); i += 4) {
+                        for (int j = 0; j < map[i].size(); j += 4) {
+
+                            bool isNull = true;
+                            for (int k = i; k < i + 4 && isNull; k++) {
+                                for (int l = j; l < j + 4 && isNull; l++) {
+                                    if (map[k][l].GetType() != Block::Type::null) {
+                                        isNull = false;
+                                    }
                                 }
                             }
-                        }
-                        if (isNull) {
-                            nodemap[i / 4][j / 4].type = Node::Type::null;
-                        } else {
-                            nodemap[i / 4][j / 4].type = Node::Type::brick;
-                        }
+                            if (isNull) {
+                                nodemap[i / 4][j / 4].type = Node::Type::null;
+                            } else {
+                                nodemap[i / 4][j / 4].type = Node::Type::brick;
+                            }
 
-                    }
-                }
-                nodemap[6][12].type = Node::Type::base;
-                if (nodemap[5][12].type != Node::Type::null) {
-                    nodemap[5][12].type = Node::Type::base;
-                }
-                if (nodemap[7][12].type != Node::Type::null) {
-                    nodemap[7][12].type = Node::Type::base;
-                }
-                if (nodemap[6][11].type != Node::Type::null) {
-                    nodemap[6][11].type = Node::Type::base;
-                }
-
-
-                // Import to db
-                for (int i = 0; i < nodemap.size(); i++) {
-                    for (int j = 0; j < nodemap[i].size(); j++) {
-                        if (nodemap[i][j].type == Node::Type::base) {
-                            cout << "types(node(" << i << ", " << j << "), base)\n";
-                        } else if (nodemap[i][j].type == Node::Type::null) {
-                            cout << "types(node(" << i << ", " << j << "), road)\n";
-                        }
-                        
-                    }
-                }
-
-
-                int sz = nodemap.size();
-                for (int i = 0; i < nodemap.size(); i++) {
-                    for (int j = 0; j < nodemap[i].size(); j++) {
-                        if (nodemap[i][j].type == Node::Type::brick || nodemap[i][j].type == Node::Type::rock) {
-                            continue;
-                        }
-                        if (i-1>=0 && nodemap[i-1][j].type == Node::Type::null) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i-1 << ", " << j << ")), " << "left)\n";
-                        }
-                        if (i+1<sz && nodemap[i+1][j].type == Node::Type::null) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i+1 << ", " << j << ")), " << "right)\n";
-                        }
-                        if (j-1>=0 && nodemap[i][j-1].type == Node::Type::null) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j-1 << ")), " << "up)\n";
-                        }
-                        if (j+1<sz && nodemap[i][j+1].type == Node::Type::null) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j+1 << ")), " << "down)\n";
-                        }
-                        if (i - 1 >= 0 && nodemap[i - 1][j].type == Node::Type::base) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i - 1 << ", " << j << ")), " << "left)\n";
-                        }
-                        if (i + 1<sz && nodemap[i + 1][j].type == Node::Type::base) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i + 1 << ", " << j << ")), " << "right)\n";
-                        }
-                        if (j - 1 >= 0 && nodemap[i][j - 1].type == Node::Type::base) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j - 1 << ")), " << "up)\n";
-                        }
-                        if (j + 1<sz && nodemap[i][j + 1].type == Node::Type::base) {
-                            cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j + 1 << ")), " << "down)\n";
                         }
                     }
+                    nodemap[6][12].type = Node::Type::base;
+                    if (nodemap[5][12].type != Node::Type::null) {
+                        nodemap[5][12].type = Node::Type::base;
+                    }
+                    if (nodemap[7][12].type != Node::Type::null) {
+                        nodemap[7][12].type = Node::Type::base;
+                    }
+                    if (nodemap[6][11].type != Node::Type::null) {
+                        nodemap[6][11].type = Node::Type::base;
+                    }
+
+
+                    // Import to db
+                    for (int i = 0; i < nodemap.size(); i++) {
+                        for (int j = 0; j < nodemap[i].size(); j++) {
+                            if (nodemap[i][j].type == Node::Type::base) {
+                                cout << "types(node(" << i << ", " << j << "), base)\n";
+                            } else if (nodemap[i][j].type == Node::Type::null) {
+                                cout << "types(node(" << i << ", " << j << "), road)\n";
+                            }
+
+                        }
+                    }
+
+
+                    int sz = nodemap.size();
+                    for (int i = 0; i < nodemap.size(); i++) {
+                        for (int j = 0; j < nodemap[i].size(); j++) {
+                            if (nodemap[i][j].type == Node::Type::brick || nodemap[i][j].type == Node::Type::rock) {
+                                continue;
+                            }
+                            if (i - 1 >= 0 && nodemap[i - 1][j].type == Node::Type::null) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i - 1 << ", " << j << ")), " << "left)\n";
+                            }
+                            if (i + 1 < sz && nodemap[i + 1][j].type == Node::Type::null) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i + 1 << ", " << j << ")), " << "right)\n";
+                            }
+                            if (j - 1 >= 0 && nodemap[i][j - 1].type == Node::Type::null) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j - 1 << ")), " << "up)\n";
+                            }
+                            if (j + 1 < sz && nodemap[i][j + 1].type == Node::Type::null) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j + 1 << ")), " << "down)\n";
+                            }
+                            if (i - 1 >= 0 && nodemap[i - 1][j].type == Node::Type::base) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i - 1 << ", " << j << ")), " << "left)\n";
+                            }
+                            if (i + 1 < sz && nodemap[i + 1][j].type == Node::Type::base) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i + 1 << ", " << j << ")), " << "right)\n";
+                            }
+                            if (j - 1 >= 0 && nodemap[i][j - 1].type == Node::Type::base) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j - 1 << ")), " << "up)\n";
+                            }
+                            if (j + 1 < sz && nodemap[i][j + 1].type == Node::Type::base) {
+                                cout << "commands(edge(node(" << i << ", " << j << "), node(" << i << ", " << j + 1 << ")), " << "down)\n";
+                            }
+                        }
+                    }
+
+                    //cout << std::endl;
+
+                    cout.close();
+
+
+                    
+                    Point spawnPoint(0, 0);
+
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    
+                    // Prolog dll call
+                    if (pFunction) {
+                        pFunction(spawnPoint.X, spawnPoint.Y);
+                    }
+                    
+
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+
+                    // Parse
+                    std::ifstream cin("botmap.txt");
+
+                    std::vector<Direction> commands;
+
+                    std::string s;
+                    while (cin >> s) {
+                        if (s.find("up") != -1) {
+                            commands.push_back(Direction::up);
+                        }
+                        if (s.find("down") != -1) {
+                            commands.push_back(Direction::down);
+                        }
+                        if (s.find("left") != -1) {
+                            commands.push_back(Direction::left);
+                        }
+                        if (s.find("right") != -1) {
+                            commands.push_back(Direction::right);
+                        }
+                    }
+
+
+
+                    //DeleteFile("botmap.txt");
+                    //DeleteFile("map.txt");
+
+
+                    // Enemy Spawner
+                    tanksMutex.lock();
+
+                    Tank* enemy = new Tank(this, TankLayout::GetWhiteTankLayout(TankLayout::Direction::Down), commands);
+                    tanks.push_back(enemy);
+                    enemy->MoveTo(spawnPoint.X * 32, spawnPoint.Y * 32);
+                    Add(enemy);
+
+                    tanksMutex.unlock();
+
                 }
 
-                //cout << std::endl;
-
-                cout.close();
                 std::this_thread::sleep_for(std::chrono::seconds(2));
 
             }
             
-
+            FreeLibrary(hLib);
 
 
         }));
@@ -368,7 +430,7 @@ namespace simple_tanks {
 
         SolidBrush brush(Color(50, 0, 255, 0));
         SolidBrush bbrush(Color(50, 0, 0, 255));
-#if _DEBUG
+//#if _DEBUG
         for (int i = 0; i < nodemap.size(); i++) {
             for (int j = 0; j < nodemap.size(); j++) {
                 Node &node = nodemap[i][j];
@@ -380,7 +442,7 @@ namespace simple_tanks {
                 }
             }
         }
-#endif
+//#endif
 
     }
 

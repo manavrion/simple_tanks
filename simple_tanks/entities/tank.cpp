@@ -3,6 +3,8 @@
 #include "..\gui\game_field.h"
 #include "..\gui\gui_game_main_window.h"
 
+#include <deque>
+#include <utility>
 #include <thread>
 #include <chrono>
 
@@ -15,12 +17,12 @@ namespace simple_tanks {
         tankLayout(tankLayout),
         tankThreadTerminate(false),
         gameField(gameField),
-        direction(Direction::Up),
+        direction(Direction::up),
         moveUp(false),
         moveDown(false),
         moveLeft(false),
         moveRight(false),
-        health(1) {
+        health(5) {
 
         SetWidth(kTankSize);
         SetHeight(kTankSize);
@@ -48,41 +50,107 @@ namespace simple_tanks {
                 if (count > 1) {
                     if (moveUp && MoveTo(x, y - kStepSize)) {
                         this->tankLayout->MoveUp();
-                        direction = Direction::Up;
+                        direction = Direction::up;
                     }
                     if (moveDown && MoveTo(x, y + kStepSize)) {
                         this->tankLayout->MoveDown();
-                        direction = Direction::Down;
+                        direction = Direction::down;
                     }
                     if (moveLeft && MoveTo(x - kStepSize, y)) {
                         this->tankLayout->MoveLeft();
-                        direction = Direction::Left;
+                        direction = Direction::left;
                     }
                     if (moveRight && MoveTo(x + kStepSize, y)) {
                         this->tankLayout->MoveRight();
-                        direction = Direction::Right;
+                        direction = Direction::right;
                     }
                 } else {
                     if (moveUp) {
                         MoveTo(x, y - kStepSize);
                         this->tankLayout->MoveUp();
-                        direction = Direction::Up;
+                        direction = Direction::up;
                     }
                     if (moveDown) {
                         MoveTo(x, y + kStepSize);
                         this->tankLayout->MoveDown();
-                        direction = Direction::Down;
+                        direction = Direction::down;
                     }
                     if (moveLeft) {
                         MoveTo(x - kStepSize, y);
                         this->tankLayout->MoveLeft();
-                        direction = Direction::Left;
+                        direction = Direction::left;
                     }
                     if (moveRight) {
                         MoveTo(x + kStepSize, y);
                         this->tankLayout->MoveRight();
-                        direction = Direction::Right;
+                        direction = Direction::right;
                     }
+                }
+                
+            }
+        }));
+
+        GuiGameMainWindow::AddDynamicObject(this);
+    }
+
+    Tank::Tank(GameField * gameField, TankLayout * tankLayout, std::vector<Direction> commands) :
+        tankLayout(tankLayout),
+        tankThreadTerminate(false),
+        gameField(gameField),
+        direction(Direction::up),
+        moveUp(false),
+        moveDown(false),
+        moveLeft(false),
+        moveRight(false),
+        health(5),
+        commands(commands){
+
+        SetWidth(kTankSize);
+        SetHeight(kTankSize);
+
+
+        tankThread.reset(new std::thread([&]() {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            
+            std::deque<std::pair<Direction, int>> path;
+
+            for (auto &dir : this->commands) {
+                path.push_back({dir, 32/ kStepSize });
+            }
+
+            while (!tankThreadTerminate) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+                if (path.empty()) {
+                    continue;
+                }
+
+                std::pair<Direction, int> u = path.front();
+                path.pop_front();
+
+                if (u.first == Direction::up) {
+                    MoveTo(x, y - kStepSize);
+                    this->tankLayout->MoveUp();
+                    direction = Direction::up;
+                }
+                if (u.first == Direction::down) {
+                    MoveTo(x, y + kStepSize);
+                    this->tankLayout->MoveDown();
+                    direction = Direction::down;
+                }
+                if (u.first == Direction::left) {
+                    MoveTo(x - kStepSize, y);
+                    this->tankLayout->MoveLeft();
+                    direction = Direction::left;
+                }
+                if (u.first == Direction::right) {
+                    MoveTo(x + kStepSize, y);
+                    this->tankLayout->MoveRight();
+                    direction = Direction::right;
+                }
+                u.second -= kStepSize;
+                if (u.second > 0) {
+                    path.push_front(u);
                 }
                 
             }
