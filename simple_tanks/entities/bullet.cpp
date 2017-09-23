@@ -94,7 +94,7 @@ namespace simple_tanks {
 
     bool Bullet::MoveTo(int x, int y) {
         if (IsValidBulletPos(x, y)) {
-            gameField->TestBullet(this);
+            
             this->x = x;
             this->y = y;
             return true;

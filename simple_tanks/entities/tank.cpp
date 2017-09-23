@@ -118,8 +118,14 @@ namespace simple_tanks {
                 path.push_back({dir, 32/ kStepSize });
             }
 
+            int i = 0;
             while (!tankThreadTerminate) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                i++;
+                if (i % 64 == 0) {
+                    Shoot();
+                }
+                
 
                 if (path.empty()) {
                     continue;

@@ -136,6 +136,7 @@ namespace simple_tanks {
 
                 tanksMutex.unlock();
             }*/
+
         }));
 
 
@@ -363,6 +364,14 @@ namespace simple_tanks {
 
             return;
         }
+
+        // Test Bullet
+
+
+        for (auto bullet : bullets) {
+            TestBullet(bullet);
+        }
+        
 
         // Garbage remove
         Bullet* b = nullptr;
