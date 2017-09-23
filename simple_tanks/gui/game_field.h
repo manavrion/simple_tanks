@@ -100,6 +100,10 @@ namespace simple_tanks {
         virtual void PaintChildBuffers(Graphics graphics) final override;
         virtual void PaintPost(Graphics graphics) final override;
 
+
+        void UpdateNodeState();
+        friend int UpdateBotCommandsCollection(GameField*);
+
     protected:
         std::vector<std::vector<Block>> map;
         std::unique_ptr<Image> brickTexture;
@@ -134,6 +138,9 @@ namespace simple_tanks {
         bool worldStateRegeneratorTerminate;
 
         std::vector<std::vector<Node>> nodemap;
+
+        std::vector<std::pair<Point, std::vector<Direction>>> commandsCollection;
+        std::mutex commandsCollectionMutex;
 
 
     };

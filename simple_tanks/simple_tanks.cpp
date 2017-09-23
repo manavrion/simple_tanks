@@ -21,6 +21,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
     while (GuiGameMainWindow::IsRestart()) {
         std::unique_ptr<Window> window(new GuiGameMainWindow());
         window->Run();
+        break;
     }
 
     return 0;

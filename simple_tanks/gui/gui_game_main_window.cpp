@@ -72,13 +72,14 @@ namespace simple_tanks {
 
     GuiGameMainWindow::~GuiGameMainWindow() {
         frameUpdaterThreadTerminate = true;
+        guiGameMainWindow = nullptr;
         frameUpdaterThread->join();
 
         for (auto& key : menuMap) {
             delete key.second;
         }
 
-        guiGameMainWindow = nullptr;
+        
     }
     
     // static
