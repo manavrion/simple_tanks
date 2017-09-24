@@ -103,6 +103,7 @@ namespace simple_tanks {
 
         void UpdateNodeState();
         friend int UpdateBotCommandsCollection(GameField*);
+        friend int UpdateBotCommandsCollection2(GameField*);
 
     protected:
         std::vector<std::vector<Block>> map;

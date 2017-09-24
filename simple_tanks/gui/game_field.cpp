@@ -4,6 +4,7 @@
 #include "..\entities\bullet.h"
 #include "gui_game_main_window.h"
 #include "..\entities\tank_layout.h"
+#include "../simple_tanks.h"
 
 #include <unordered_map>
 #include <string>
@@ -45,25 +46,16 @@ namespace simple_tanks {
 
         //spawnPoints.push_back({ 0, 0 });
         //spawnPoints.push_back({ 12, 0 });
-        spawnPoints.push_back({ 2, 5 });
+        spawnPoints.push_back({ 2, 3 });
+        spawnPoints.push_back({ 10, 3 });
+        //spawnPoints.push_back({ 2, 5 });
         //spawnPoints.push_back({ 8, 0 });
 
-
-        HMODULE hLib = LoadLibrary("nw.dll");
-        if (hLib == nullptr) return 0;
-
-        void(*_stdcall pUpdateNodes)(int, int);
-        (FARPROC & _stdcall)pUpdateNodes = GetProcAddress(hLib, "updateNodes");
-        if (pUpdateNodes == nullptr) return 0;
-
-
-        sender->commandsCollection.clear();
-
-
-        for (auto spawnPoint : spawnPoints) {
+        {
+            auto spawnPoint = spawnPoints[0];
 
             // Prolog dll call
-            pUpdateNodes(spawnPoint.X, spawnPoint.Y);
+            pUpdateNodes1(spawnPoint.X, spawnPoint.Y);
 
             // Parse
             std::ifstream cin("botmap.txt");
@@ -93,7 +85,42 @@ namespace simple_tanks {
 
         }
 
-        FreeLibrary(hLib);
+
+
+
+        /*{
+            auto spawnPoint = spawnPoints[1];
+
+            // Prolog dll call
+            pUpdateNodes2(spawnPoint.X, spawnPoint.Y);
+
+            // Parse
+            std::ifstream cin("botmap.txt");
+            std::vector<Direction> commands;
+
+            std::string s;
+            while (cin >> s) {
+                if (s.find("up") != -1) {
+                    commands.push_back(Direction::up);
+                }
+                if (s.find("down") != -1) {
+                    commands.push_back(Direction::down);
+                }
+                if (s.find("left") != -1) {
+                    commands.push_back(Direction::left);
+                }
+                if (s.find("right") != -1) {
+                    commands.push_back(Direction::right);
+                }
+            }
+            cin.close();
+
+            sender->commandsCollection.push_back({ spawnPoint, commands });
+
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        }*/
+
 
 
         sender->commandsCollectionMutex.unlock();
@@ -102,7 +129,57 @@ namespace simple_tanks {
     }
 
 
+    int UpdateBotCommandsCollection2(GameField* sender) {
+        sender->commandsCollectionMutex.lock();
 
+        std::vector<Point> spawnPoints;
+
+        //spawnPoints.push_back({ 0, 0 });
+        //spawnPoints.push_back({ 12, 0 });
+        spawnPoints.push_back({ 2, 3 });
+        spawnPoints.push_back({ 10, 3 });
+        //spawnPoints.push_back({ 2, 5 });
+        //spawnPoints.push_back({ 8, 0 });
+
+        {
+            auto spawnPoint = spawnPoints[1];
+
+            // Prolog dll call
+            pUpdateNodes2(spawnPoint.X, spawnPoint.Y);
+
+            // Parse
+            std::ifstream cin("botmap.txt");
+            std::vector<Direction> commands;
+
+            std::string s;
+            while (cin >> s) {
+                if (s.find("up") != -1) {
+                    commands.push_back(Direction::up);
+                }
+                if (s.find("down") != -1) {
+                    commands.push_back(Direction::down);
+                }
+                if (s.find("left") != -1) {
+                    commands.push_back(Direction::left);
+                }
+                if (s.find("right") != -1) {
+                    commands.push_back(Direction::right);
+                }
+            }
+            cin.close();
+
+            sender->commandsCollection.push_back({ spawnPoint, commands });
+
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        }
+
+
+
+        sender->commandsCollectionMutex.unlock();
+
+        return 0;
+    }
 
 
 
@@ -224,7 +301,7 @@ namespace simple_tanks {
         UpdateNodeState();
 
         new std::thread([=]() {UpdateBotCommandsCollection(this); });
-
+        new std::thread([=]() {UpdateBotCommandsCollection2(this); });
         
 
 
