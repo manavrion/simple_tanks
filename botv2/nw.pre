@@ -1,0 +1,16 @@
+/*****************************************************************************
+
+		Copyright (c) My Company
+
+ Project:  NW
+ FileName: nw.PRE
+ Purpose: Predicate definitions for NW.PRO
+ Written by: Visual Prolog
+ Comments:
+******************************************************************************/
+
+%BEGIN_DECL, System generated global predicates
+GLOBAL PREDICATES
+
+  project_ShowHelpContext(INTEGER Index) - (i)
+%END_DECL

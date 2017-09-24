@@ -43,9 +43,9 @@ namespace simple_tanks {
 
         std::vector<Point> spawnPoints;
 
-        spawnPoints.push_back({ 0, 0 });
+        //spawnPoints.push_back({ 0, 0 });
         //spawnPoints.push_back({ 12, 0 });
-        //spawnPoints.push_back({ 4, 0 });
+        spawnPoints.push_back({ 2, 5 });
         //spawnPoints.push_back({ 8, 0 });
 
 
@@ -447,13 +447,13 @@ namespace simple_tanks {
         }
         nodemap[6][12].type = Node::Type::base;
         if (nodemap[5][12].type != Node::Type::null) {
-            nodemap[5][12].type = Node::Type::null;
+            nodemap[5][12].type = Node::Type::base;
         }
         if (nodemap[7][12].type != Node::Type::null) {
-            nodemap[7][12].type = Node::Type::null;
+            nodemap[7][12].type = Node::Type::base;
         }
         if (nodemap[6][11].type != Node::Type::null) {
-            nodemap[6][11].type = Node::Type::null;
+            nodemap[6][11].type = Node::Type::base;
         }
 
 
