@@ -19,11 +19,11 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
     HMODULE hLib1 = LoadLibrary("nw1.dll");
     HMODULE hLib2 = LoadLibrary("nw2.dll");
-    HMODULE hLib3 = LoadLibrary("nw3.dll");
+    //HMODULE hLib3 = LoadLibrary("nw3.dll");
 
     (FARPROC & _stdcall)pUpdateNodes1 = GetProcAddress(hLib1, "updateNodes");
     (FARPROC & _stdcall)pUpdateNodes2 = GetProcAddress(hLib2, "updateNodes");
-    (FARPROC & _stdcall)pUpdateNodes3 = GetProcAddress(hLib3, "updateNodes");
+    //(FARPROC & _stdcall)pUpdateNodes3 = GetProcAddress(hLib3, "updateNodes");
 
     // Initialize GDI+.
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -39,7 +39,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
     FreeLibrary(hLib1);
     FreeLibrary(hLib2);
-    FreeLibrary(hLib3);
+    //FreeLibrary(hLib3);
 
     return 0;
 }

@@ -167,7 +167,7 @@ namespace simple_tanks {
                 }
             }
             cin.close();
-
+            commands.pop_back();
             sender->commandsCollection.push_back({ spawnPoint, commands });
 
             std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -233,7 +233,7 @@ namespace simple_tanks {
         tanks.push_back(userTank);
         userTank->MoveTo(4 * 4 * 8, 12 * 4 * 8);
 
-        auto manip = [](KeyEvent* keyEvent, Tank* tank, bool act) {
+        auto manip = [&](KeyEvent* keyEvent, Tank* tank, bool act) {
             switch (keyEvent->keyCode) {
                 case KeyEvent::KeyCodes::alphaW:
                     tank->MoveUp(act);
@@ -250,6 +250,11 @@ namespace simple_tanks {
                 case KeyEvent::KeyCodes::space:
                     if (act) {
                         tank->Shoot();
+                    }
+                    break;
+                case KeyEvent::KeyCodes::f1:
+                    if (act) {
+                        isdebug = !isdebug;
                     }
                     break;
                 default:
@@ -359,7 +364,7 @@ namespace simple_tanks {
 
 
         AddKeyReleaseListener([&](Frame* frame, KeyEvent* keyEvent) {
-            if ((keyEvent->keyCode == KeyEvent::KeyCodes::space) && gameover && GuiGameMainWindow::GetInstance()) {
+            if ((keyEvent->keyCode == KeyEvent::KeyCodes::escape) && gameover && GuiGameMainWindow::GetInstance()) {
                 GuiGameMainWindow::GetInstance()->Reclose();
             }
         });
@@ -473,17 +478,20 @@ namespace simple_tanks {
         SolidBrush brush(Color(50, 0, 255, 0));
         SolidBrush bbrush(Color(50, 0, 0, 255));
 //#if _DEBUG
-        for (int i = 0; i < nodemap.size(); i++) {
-            for (int j = 0; j < nodemap.size(); j++) {
-                Node &node = nodemap[i][j];
-                if (node.type == node.null) {
-                    graphics.FillRectangle(&brush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
-                }
-                if (node.type == node.base) {
-                    graphics.FillRectangle(&bbrush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
+        if (isdebug) {
+            for (int i = 0; i < nodemap.size(); i++) {
+                for (int j = 0; j < nodemap.size(); j++) {
+                    Node &node = nodemap[i][j];
+                    if (node.type == node.null) {
+                        graphics.FillRectangle(&brush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
+                    }
+                    if (node.type == node.base) {
+                        graphics.FillRectangle(&bbrush, Rect(node.x, node.y, kBlockSize * 4, kBlockSize * 4));
+                    }
                 }
             }
         }
+        
 //#endif
 
     }

@@ -143,7 +143,7 @@ namespace simple_tanks {
         std::vector<std::pair<Point, std::vector<Direction>>> commandsCollection;
         std::mutex commandsCollectionMutex;
 
-
+        bool isdebug;
     };
 
 }

@@ -119,6 +119,6 @@ clauses
 	
 goal
 
-	loadData(),  dfsBoost(node(4, 12), [],Way, 1),set_commands(Way, Commands),saveData().
+	loadData(),  dfsBoost(node(10, 3), [],Way, 1),set_commands(Way, Commands),saveData().
   	
 
