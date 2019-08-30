@@ -31,7 +31,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
     while (GuiGameMainWindow::IsRestart()) {
-        std::unique_ptr<Window> window(new GuiGameMainWindow());
+        auto window = std::make_unique<GuiGameMainWindow>();
         window->Run();
         break;
     }
